@@ -1,0 +1,33 @@
+{
+  "name": "omega-app",
+  "homepage": "https://lojadquirindo.com.br",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.3.5",
+    "cpf-cnpj-validator": "^1.0.3",
+    "ipaddr.js": "^2.0.1",
+    "numeral": "^2.0.6",
+    "react": "^18.2.0",
+    "react-countdown": "^2.3.5",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.8.0",
+    "react-input-mask": "^2.0.4",
+    "react-responsive-modal": "^6.4.1",
+    "react-router-dom": "^6.8.2",
+    "styled-components": "^5.3.8",
+    "swiper": "^9.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.27",
+    "@types/react-dom": "^18.0.10",
+    "@vitejs/plugin-react": "^3.1.0",
+    "vite": "^4.1.0"
+  }
+}
