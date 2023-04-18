@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react"
 import InputMask from "react-input-mask"
 import axios from "axios"
+import * as cardValidator from "card-validator"
+import CPF from "cpf-check"
 
 import { FormWrapper, InputWrapper, Label, Button } from "./styles"
 
@@ -11,24 +13,19 @@ function Formulario() {
   const [telefone, setTelefone] = useState("")
 
   const [cep, setCep] = useState("")
-
   const [cpf, setCpf] = useState("")
-
   const [logradouro, setLogradouro] = useState("")
-
   const [bairro, setBairro] = useState("")
-
   const [numero, setNumero] = useState("")
-
   const [complemento, setComplemento] = useState("")
-
   const [cidade, setCidade] = useState("")
-
   const [estado, setEstado] = useState("")
-
   const [showAddress, setShowAddress] = useState("")
-
   const [errorCEP, setErrorCEP] = useState("")
+
+  const [errorCard, setErrorCard] = useState("")
+
+  const [errorCPF, setErrorCPF] = useState("")
 
   const [ipAddress, setIpAddress] = useState("")
   useEffect(() => {
@@ -114,6 +111,40 @@ function Formulario() {
     }
   }
 
+  function handleCardValidation(event) {
+    event.preventDefault()
+    const cardNumber = event.target.value
+
+    const cardValidation = cardValidator.number(cardNumber)
+
+    // const cardType = cardValidator.number(cardNumber).card.type
+
+    if (!cardValidation.isValid && cardNumber.length === 19) {
+      setErrorCard(
+        "Número de cartão de crédito inválido. Por favor, verificar e corrigir."
+      )
+    } else {
+      setErrorCard("")
+    }
+
+    // teste de bandeira do cartão
+    // if (cardType === "visa") {
+    //   console.log("cartão VISA")
+    // } else if (cardType === "mastercard") {
+    //   console.log("cartão MASTERCARD")
+    // }
+
+    console.log("Cartão válido")
+  }
+
+  function validateCPF() {
+    if (CPF.validate(cpf)) {
+      setErrorCPF("")
+    } else {
+      setErrorCPF("CPF inválido")
+    }
+  }
+
   function handleSubmit() {
     formFirst()
   }
@@ -129,7 +160,6 @@ function Formulario() {
           placeholder="E-mail*"
         />
       </InputWrapper>
-
       <InputWrapper>
         <InputMask
           type="text"
@@ -139,7 +169,6 @@ function Formulario() {
           placeholder="Nome completo*"
         />
       </InputWrapper>
-
       <InputWrapper>
         <InputMask
           type="tel"
@@ -159,10 +188,18 @@ function Formulario() {
           mask="999.999.999-99"
           maskChar={null}
           value={cpf}
+          onBlur={validateCPF}
           onChange={(event) => setCpf(event.target.value)}
           placeholder="CPF*"
         />
       </InputWrapper>
+
+      {errorCPF && (
+        <InputWrapper>
+          <span>{errorCPF}</span>
+        </InputWrapper>
+      )}
+
       <InputWrapper>
         <InputMask
           mask="99999-999"
@@ -173,13 +210,11 @@ function Formulario() {
           onChange={handleCepChange}
         />
       </InputWrapper>
-
       {errorCEP && (
         <InputWrapper>
           <span>{errorCEP}</span>
         </InputWrapper>
       )}
-
       {showAddress && logradouro && bairro && cidade && estado && (
         <div>
           <InputWrapper>
@@ -220,7 +255,37 @@ function Formulario() {
           </InputWrapper>
         </div>
       )}
+      <InputWrapper className="formPay">
+        <InputMask
+          mask="9999 9999 9999 9999"
+          maskChar={null}
+          id="creditCard"
+          placeholder="Número do cartão"
+          onChange={handleCardValidation}
+        />
 
+        {errorCard && (
+          <InputWrapper>
+            <span>{errorCard}</span>
+          </InputWrapper>
+        )}
+
+        <InputMask id="nameCard" placeholder="Nome impresso no cartão" />
+
+        <InputMask
+          mask="99/99"
+          maskChar={null}
+          id="validityCard"
+          placeholder="MM/AA"
+        />
+
+        <InputMask
+          mask="9999"
+          maskChar={null}
+          id="codeCard"
+          placeholder="CVV"
+        />
+      </InputWrapper>
       <Button onClick={formFirst}>Enviar</Button>
     </FormWrapper>
   )

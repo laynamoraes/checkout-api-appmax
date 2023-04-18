@@ -9,6 +9,7 @@ export const FormWrapper = styled.form`
 export const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 10px;
   margin-bottom: 10px;
   width: 100%;
   max-width: 400px;
