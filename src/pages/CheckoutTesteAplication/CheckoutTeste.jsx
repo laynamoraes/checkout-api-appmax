@@ -3,8 +3,44 @@ import InputMask from "react-input-mask"
 import axios from "axios"
 import * as cardValidator from "card-validator"
 import CPF from "cpf-check"
+import { Accordion } from "react-bootstrap-accordion"
+// import "react-bootstrap-accordion/dist/index.css"
+import "./styles"
 
-import { FormWrapper, InputWrapper, Label, Button } from "./styles"
+import {
+  BsShieldLockFill,
+  BsCreditCard,
+  BsFillPersonFill,
+  BsCalendar,
+} from "react-icons/bs"
+
+import { FiLock } from "react-icons/fi"
+
+import {
+  Container,
+  FormWrapper,
+  InputWrapper,
+  Label,
+  Button,
+  GlobalStyle,
+  HeaderPromotion,
+  HeaderText,
+  DivFlex,
+  Cronometro,
+  Content,
+  ImageGarantia,
+  TitleSection,
+  Text,
+  DivFlexHeader,
+  DivFlexNoWrap,
+  AccordionWrapper,
+  ButtonCnt,
+  SectionMobile,
+  Quantidade,
+  Cupom,
+  ResumoPedido,
+  Total,
+} from "./styles"
 
 function Formulario() {
   const acessToken = "8D479FDE-06804C4D-CE2E17D2-8180D7D1"
@@ -150,144 +186,356 @@ function Formulario() {
   }
 
   return (
-    <FormWrapper className="formulario" onSubmit={handleSubmit}>
-      <InputWrapper>
-        <InputMask
-          type="email"
-          id="email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          placeholder="E-mail*"
-        />
-      </InputWrapper>
-      <InputWrapper>
-        <InputMask
-          type="text"
-          id="nomeCompleto"
-          value={nomeCompleto}
-          onChange={(event) => setNomeCompleto(event.target.value)}
-          placeholder="Nome completo*"
-        />
-      </InputWrapper>
-      <InputWrapper>
-        <InputMask
-          type="tel"
-          id="telefone"
-          mask="(99) 99999-9999"
-          maskChar={null}
-          value={telefone}
-          onChange={(event) => setTelefone(event.target.value)}
-          placeholder="Celular*"
-        />
-      </InputWrapper>
+    <Container>
+      <GlobalStyle />
+      <HeaderPromotion>
+        <DivFlexHeader style={{ marginBottom: "8px" }}>
+          <BsShieldLockFill fill="#50A756" style={{ marginRight: "5px" }} />
+          <HeaderText>COMPRA 100% SEGURA</HeaderText>
+        </DivFlexHeader>
+        <DivFlexHeader>
+          <HeaderText style={{ marginRight: "5px" }}>
+            Promoção especial encerra em:
+          </HeaderText>
+          <Cronometro>00:00</Cronometro>
+        </DivFlexHeader>
+      </HeaderPromotion>
 
-      <InputWrapper>
-        <InputMask
-          type="text"
-          id="cpf"
-          mask="999.999.999-99"
-          maskChar={null}
-          value={cpf}
-          onBlur={validateCPF}
-          onChange={(event) => setCpf(event.target.value)}
-          placeholder="CPF*"
-        />
-      </InputWrapper>
+      <Content>
+        <FormWrapper className="formulario" onSubmit={handleSubmit}>
+          <ImageGarantia
+            src="https://assets.mycartpanda.com/static/theme_images/d0/0d/07/290462_0670611796.png"
+            alt="Selo de Garantia"
+          />
 
-      {errorCPF && (
-        <InputWrapper>
-          <span>{errorCPF}</span>
-        </InputWrapper>
-      )}
+          <SectionMobile>
+            <Accordion title="Resumo do pedido" show>
+              <div
+                id="detalhesProduto"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-around",
+                  margin: "10px 0 25px 0",
+                }}
+              >
+                <img
+                  src="https://thumbor.cartpanda.com/OiCUsJv_s3NQdbJmD-4oUX6yKTA=/64x0/https://assets.mycartpanda.com/static/products_images/2xO8vbpB6kJ6W4ieo2VvEJiyg4qYZl.jpg"
+                  alt="Imagem do Produto"
+                />
+                <p>
+                  BoneLink 7.1™ - COMPRE 1<br />
+                  LEVE 2
+                </p>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-end",
+                    gap: "5px",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontSize: "1rem",
+                      fontWeight: "600",
+                      color: "#202223",
+                    }}
+                  >
+                    R$ 99,90
+                  </p>
+                  <Quantidade>- &nbsp;&nbsp; 1 &nbsp;&nbsp; +</Quantidade>
+                </div>
+              </div>
+              <Cupom id="cupom">Tem cupom de desconto ou vale presente?</Cupom>
+              <ResumoPedido id="resumoPedido">
+                <div>
+                  <p>Subtotal</p>
+                  <p>Entrega</p>
+                  <p>Desconto cartão</p>
+                  <Total>Total</Total>
+                </div>
+                <div style={{ textAlign: "end" }}>
+                  <p>R$ 99,90</p>
+                  <p>---</p>
+                  <p>- R$ 0,00</p>
+                  <Total>12x de R$ 10,03*</Total>
+                  <p style={{ fontSize: "0.625rem" }}>OU R$ 99,90 À VISTA</p>
+                </div>
+              </ResumoPedido>
+            </Accordion>
+          </SectionMobile>
 
-      <InputWrapper>
-        <InputMask
-          mask="99999-999"
-          maskChar={null}
-          id="cep"
-          placeholder="CEP*"
-          value={cep}
-          onChange={handleCepChange}
-        />
-      </InputWrapper>
-      {errorCEP && (
-        <InputWrapper>
-          <span>{errorCEP}</span>
-        </InputWrapper>
-      )}
-      {showAddress && logradouro && bairro && cidade && estado && (
-        <div>
+          <TitleSection>Informações Pessoais</TitleSection>
+          <Text>Para quem devemos entregar o pedido?</Text>
           <InputWrapper>
-            <span>
-              {cidade}/{estado}
-            </span>
-
             <InputMask
-              type="text"
-              id="logradouro"
-              placeholder="Endereço*"
-              value={logradouro}
-              onChange={(event) => setLogradouro(event.target.value)}
+              type="email"
+              id="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              placeholder="E-mail*"
             />
           </InputWrapper>
-
-          <InputWrapper>
-            <InputMask
-              type="text"
-              id="numero"
-              placeholder="Número*"
-              onChange={(event) => setNumero(event.target.value)}
-            />
-          </InputWrapper>
-
-          <InputWrapper>
-            <InputMask type="text" id="complemento" placeholder="Complemento" />
-          </InputWrapper>
-
           <InputWrapper>
             <InputMask
               type="text"
-              id="bairro"
-              placeholder="Bairro*"
-              value={bairro}
-              onChange={(event) => setBairro(event.target.value)}
+              id="nomeCompleto"
+              value={nomeCompleto}
+              onChange={(event) => setNomeCompleto(event.target.value)}
+              placeholder="Nome completo*"
             />
           </InputWrapper>
-        </div>
-      )}
-      <InputWrapper className="formPay">
-        <InputMask
-          mask="9999 9999 9999 9999"
-          maskChar={null}
-          id="creditCard"
-          placeholder="Número do cartão"
-          onChange={handleCardValidation}
-        />
 
-        {errorCard && (
-          <InputWrapper>
-            <span>{errorCard}</span>
+          <DivFlex style={{ marginBottom: "36px" }}>
+            <InputWrapper>
+              <InputMask
+                type="tel"
+                id="telefone"
+                mask="(99) 99999-9999"
+                maskChar={null}
+                value={telefone}
+                onChange={(event) => setTelefone(event.target.value)}
+                placeholder="Celular*"
+              />
+            </InputWrapper>
+
+            <InputWrapper>
+              <InputMask
+                type="text"
+                id="cpf"
+                mask="999.999.999-99"
+                maskChar={null}
+                value={cpf}
+                onBlur={validateCPF}
+                onChange={(event) => setCpf(event.target.value)}
+                placeholder="CPF*"
+              />
+            </InputWrapper>
+
+            {errorCPF && (
+              <InputWrapper>
+                <span>{errorCPF}</span>
+              </InputWrapper>
+            )}
+          </DivFlex>
+
+          <TitleSection>Informações de Entrega</TitleSection>
+          <Text>Para onde devemos entregar o pedido?</Text>
+
+          <InputWrapper style={{ flexDirection: "row", alignItems: "center" }}>
+            <InputMask
+              style={{ maxWidth: "186px" }}
+              mask="99999-999"
+              maskChar={null}
+              id="cep"
+              placeholder="CEP*"
+              value={cep}
+              onChange={handleCepChange}
+            />
+            {showAddress && logradouro && bairro && cidade && estado && (
+              <span>
+                {cidade}/{estado}
+              </span>
+            )}
           </InputWrapper>
-        )}
 
-        <InputMask id="nameCard" placeholder="Nome impresso no cartão" />
+          {errorCEP && (
+            <InputWrapper>
+              <span>{errorCEP}</span>
+            </InputWrapper>
+          )}
+          {showAddress && logradouro && bairro && cidade && estado && (
+            <div>
+              <DivFlex>
+                <InputWrapper style={{ width: "250%" }}>
+                  <InputMask
+                    type="text"
+                    id="logradouro"
+                    placeholder="Endereço*"
+                    value={logradouro}
+                    onChange={(event) => setLogradouro(event.target.value)}
+                  />
+                </InputWrapper>
 
-        <InputMask
-          mask="99/99"
-          maskChar={null}
-          id="validityCard"
-          placeholder="MM/AA"
-        />
+                <InputWrapper>
+                  <InputMask
+                    type="text"
+                    id="numero"
+                    placeholder="Número*"
+                    onChange={(event) => setNumero(event.target.value)}
+                  />
+                </InputWrapper>
+              </DivFlex>
 
-        <InputMask
-          mask="9999"
-          maskChar={null}
-          id="codeCard"
-          placeholder="CVV"
-        />
-      </InputWrapper>
-      <Button onClick={formFirst}>Enviar</Button>
-    </FormWrapper>
+              <DivFlex>
+                <InputWrapper style={{ width: "250%" }}>
+                  <InputMask
+                    type="text"
+                    id="bairro"
+                    placeholder="Bairro*"
+                    value={bairro}
+                    onChange={(event) => setBairro(event.target.value)}
+                  />
+                </InputWrapper>
+
+                <InputWrapper>
+                  <InputMask
+                    type="text"
+                    id="complemento"
+                    placeholder="Complemento"
+                  />
+                </InputWrapper>
+              </DivFlex>
+            </div>
+          )}
+
+          <TitleSection style={{ marginTop: "36px" }}>
+            Método de Pagamento
+          </TitleSection>
+          <Text>Escolha o seu método de pagamento abaixo</Text>
+
+          <AccordionWrapper className="formPay">
+            <Accordion title="Cartão de crédito" show>
+              <DivFlex>
+                {/* <BsCreditCard
+                  fill="#BBBBBB"
+                  style={{ position: "absolute", margin: "15px 17px" }}
+                /> */}
+                <InputMask
+                  style={{ paddingLeft: "45px" }}
+                  mask="9999 9999 9999 9999"
+                  maskChar={null}
+                  id="creditCard"
+                  placeholder="Número do cartão"
+                  onChange={handleCardValidation}
+                />
+              </DivFlex>
+              {errorCard && (
+                <InputWrapper>
+                  <span>{errorCard}</span>
+                </InputWrapper>
+              )}
+
+              <DivFlex>
+                {/* <BsFillPersonFill
+                  fill="#BBBBBB"
+                  style={{ position: "absolute", margin: "15px 17px" }}
+                /> */}
+                <InputMask
+                  id="nameCard"
+                  placeholder="Nome impresso no cartão"
+                  style={{ paddingLeft: "45px" }}
+                />
+              </DivFlex>
+              <DivFlexNoWrap>
+                <InputWrapper>
+                  <DivFlex>
+                    {/* <BsCalendar
+                      fill="#BBBBBB"
+                      style={{ position: "absolute", margin: "15px 17px" }}
+                    /> */}
+                    <InputMask
+                      style={{ paddingLeft: "45px" }}
+                      mask="99/99"
+                      maskChar={null}
+                      id="validityCard"
+                      placeholder="MM/AA"
+                    />
+                  </DivFlex>
+                </InputWrapper>
+
+                <InputWrapper>
+                  <DivFlex>
+                    {/* <FiLock
+                      color="#BBBBBB"
+                      style={{ position: "absolute", margin: "15px 17px" }}
+                    /> */}
+                    <InputMask
+                      style={{ paddingLeft: "45px" }}
+                      mask="9999"
+                      maskChar={null}
+                      id="codeCard"
+                      placeholder="CVV"
+                    />
+                  </DivFlex>
+                </InputWrapper>
+              </DivFlexNoWrap>
+              <InputMask id="payCard" placeholder="Parcelas" />
+              <ButtonCnt>
+                <Button onClick={formFirst}>
+                  <FiLock />
+                  FINALIZAR COMPRA
+                </Button>
+                <Text
+                  style={{
+                    color: "#28363d",
+                    fontSize: "0.813rem",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                  }}
+                >
+                  <FiLock />
+                  Protegemos seus dados de pagamento usando encriptação de alto
+                  nível
+                </Text>
+              </ButtonCnt>
+            </Accordion>
+
+            <InputWrapper
+              className="formPayPix"
+              style={{ borderTop: "1px solid #d9d9d9" }}
+            >
+              <Accordion title="PIX 12% OFF">
+                <Text style={{ color: "#000", marginBottom: "20px" }}>
+                  Clique em "Finalizar Compra" para gerar o PIX.
+                </Text>
+                <Text style={{ color: "#000", marginBottom: "20px" }}>
+                  Informações sobre o pagamento via PIX:
+                </Text>
+                <ul style={{ marginLeft: "40px" }}>
+                  <li>
+                    <Text style={{ color: "#000", lineHeight: "1" }}>
+                      Valor à vista R$ 87,91;
+                    </Text>
+                  </li>
+                  <li>
+                    <Text style={{ color: "#000", lineHeight: "1" }}>
+                      Não pode ser parcelado! Use cartão de crédito para
+                      parcelar sua compra;
+                    </Text>
+                  </li>
+                  <li>
+                    <Text style={{ color: "#000", lineHeight: "1" }}>
+                      Prazo de até 30 minutos para compensar.
+                    </Text>
+                  </li>
+                </ul>
+                <ButtonCnt>
+                  <Button onClick={formFirst}>
+                    <FiLock />
+                    FINALIZAR COMPRA
+                  </Button>
+                  <Text
+                    style={{
+                      color: "#28363d",
+                      fontSize: "0.813rem",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
+                    }}
+                  >
+                    <FiLock />
+                    Protegemos seus dados de pagamento usando encriptação de
+                    alto nível
+                  </Text>
+                </ButtonCnt>
+              </Accordion>
+            </InputWrapper>
+          </AccordionWrapper>
+        </FormWrapper>
+      </Content>
+    </Container>
   )
 }
 
