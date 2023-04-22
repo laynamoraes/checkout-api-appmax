@@ -3,9 +3,9 @@ import InputMask from "react-input-mask"
 import axios from "axios"
 import * as cardValidator from "card-validator"
 import CPF from "cpf-check"
-import { Accordion } from "react-bootstrap-accordion"
-// import "react-bootstrap-accordion/dist/index.css"
 import "./styles"
+
+import { Accordion, AccordionItem } from "@szhsin/react-accordion"
 
 import {
   BsShieldLockFill,
@@ -40,6 +40,8 @@ import {
   Cupom,
   ResumoPedido,
   Total,
+  Checkbox,
+  DivHeaderAccordion,
 } from "./styles"
 
 function Formulario() {
@@ -57,13 +59,13 @@ function Formulario() {
   const [cidade, setCidade] = useState("")
   const [estado, setEstado] = useState("")
   const [showAddress, setShowAddress] = useState("")
+
   const [errorCEP, setErrorCEP] = useState("")
-
   const [errorCard, setErrorCard] = useState("")
-
   const [errorCPF, setErrorCPF] = useState("")
 
   const [ipAddress, setIpAddress] = useState("")
+
   useEffect(() => {
     async function fetchIpAddress() {
       const response = await axios.get("https://api.ipify.org?format=json")
@@ -209,59 +211,64 @@ function Formulario() {
           />
 
           <SectionMobile>
-            <Accordion title="Resumo do pedido" show>
-              <div
-                id="detalhesProduto"
-                style={{
-                  display: "flex",
-                  justifyContent: "space-around",
-                  margin: "10px 0 25px 0",
-                }}
-              >
-                <img
-                  src="https://thumbor.cartpanda.com/OiCUsJv_s3NQdbJmD-4oUX6yKTA=/64x0/https://assets.mycartpanda.com/static/products_images/2xO8vbpB6kJ6W4ieo2VvEJiyg4qYZl.jpg"
-                  alt="Imagem do Produto"
-                />
-                <p>
-                  BoneLink 7.1™ - COMPRE 1<br />
-                  LEVE 2
-                </p>
+            <Accordion>
+              <AccordionItem header="Resumo do pedido" show>
                 <div
+                  id="detalhesProduto"
                   style={{
                     display: "flex",
-                    flexDirection: "column",
-                    alignItems: "flex-end",
-                    gap: "5px",
+                    justifyContent: "space-around",
+                    padding: "15px",
+                    borderTop: "1px solid #ccc",
                   }}
                 >
-                  <p
+                  <img
+                    src="https://thumbor.cartpanda.com/OiCUsJv_s3NQdbJmD-4oUX6yKTA=/64x0/https://assets.mycartpanda.com/static/products_images/2xO8vbpB6kJ6W4ieo2VvEJiyg4qYZl.jpg"
+                    alt="Imagem do Produto"
+                  />
+                  <div style={{ padding: "0 15px", width: "100%" }}>
+                    BoneLink 7.1™ - COMPRE 1 LEVE 2
+                  </div>
+                  <div
                     style={{
-                      fontSize: "1rem",
-                      fontWeight: "600",
-                      color: "#202223",
+                      width: "65%",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "flex-end",
+                      gap: "5px",
                     }}
                   >
-                    R$ 99,90
-                  </p>
-                  <Quantidade>- &nbsp;&nbsp; 1 &nbsp;&nbsp; +</Quantidade>
+                    <p
+                      style={{
+                        fontSize: "1rem",
+                        fontWeight: "600",
+                        color: "#202223",
+                      }}
+                    >
+                      R$ 99,90
+                    </p>
+                    <Quantidade>- &nbsp;&nbsp; 1 &nbsp;&nbsp; +</Quantidade>
+                  </div>
                 </div>
-              </div>
-              <Cupom id="cupom">Tem cupom de desconto ou vale presente?</Cupom>
-              <ResumoPedido id="resumoPedido">
-                <div>
-                  <p>Subtotal</p>
-                  <p>Entrega</p>
-                  <p>Desconto cartão</p>
-                  <Total>Total</Total>
-                </div>
-                <div style={{ textAlign: "end" }}>
-                  <p>R$ 99,90</p>
-                  <p>---</p>
-                  <p>- R$ 0,00</p>
-                  <Total>12x de R$ 10,03*</Total>
-                  <p style={{ fontSize: "0.625rem" }}>OU R$ 99,90 À VISTA</p>
-                </div>
-              </ResumoPedido>
+                <Cupom id="cupom">
+                  Tem cupom de desconto ou vale presente?
+                </Cupom>
+                <ResumoPedido id="resumoPedido">
+                  <div>
+                    <p>Subtotal</p>
+                    <p>Entrega</p>
+                    <p>Desconto cartão</p>
+                    <Total>Total</Total>
+                  </div>
+                  <div style={{ textAlign: "end" }}>
+                    <p>R$ 99,90</p>
+                    <p>---</p>
+                    <p>- R$ 0,00</p>
+                    <Total>12x de R$ 10,03*</Total>
+                    <p style={{ fontSize: "0.625rem" }}>OU R$ 99,90 À VISTA</p>
+                  </div>
+                </ResumoPedido>
+              </AccordionItem>
             </Accordion>
           </SectionMobile>
 
@@ -395,122 +402,83 @@ function Formulario() {
           <Text>Escolha o seu método de pagamento abaixo</Text>
 
           <AccordionWrapper className="formPay">
-            <Accordion title="Cartão de crédito" show>
-              <DivFlex>
-                {/* <BsCreditCard
+            <Accordion>
+              <AccordionItem
+                header={
+                  <DivHeaderAccordion>
+                    <Checkbox>
+                      <section></section>
+                    </Checkbox>
+                    <p>Cartão de crédito</p>
+                  </DivHeaderAccordion>
+                }
+                initialEntered
+              >
+                <DivFlex>
+                  {/* <BsCreditCard
                   fill="#BBBBBB"
                   style={{ position: "absolute", margin: "15px 17px" }}
                 /> */}
-                <InputMask
-                  style={{ paddingLeft: "45px" }}
-                  mask="9999 9999 9999 9999"
-                  maskChar={null}
-                  id="creditCard"
-                  placeholder="Número do cartão"
-                  onChange={handleCardValidation}
-                />
-              </DivFlex>
-              {errorCard && (
-                <InputWrapper>
-                  <span>{errorCard}</span>
-                </InputWrapper>
-              )}
+                  <InputMask
+                    style={{ paddingLeft: "45px" }}
+                    mask="9999 9999 9999 9999"
+                    maskChar={null}
+                    id="creditCard"
+                    placeholder="Número do cartão"
+                    onChange={handleCardValidation}
+                  />
+                </DivFlex>
+                {errorCard && (
+                  <InputWrapper>
+                    <span>{errorCard}</span>
+                  </InputWrapper>
+                )}
 
-              <DivFlex>
-                {/* <BsFillPersonFill
+                <DivFlex>
+                  {/* <BsFillPersonFill
                   fill="#BBBBBB"
                   style={{ position: "absolute", margin: "15px 17px" }}
                 /> */}
-                <InputMask
-                  id="nameCard"
-                  placeholder="Nome impresso no cartão"
-                  style={{ paddingLeft: "45px" }}
-                />
-              </DivFlex>
-              <DivFlexNoWrap>
-                <InputWrapper>
-                  <DivFlex>
-                    {/* <BsCalendar
+                  <InputMask
+                    id="nameCard"
+                    placeholder="Nome impresso no cartão"
+                    style={{ paddingLeft: "45px" }}
+                  />
+                </DivFlex>
+                <DivFlexNoWrap>
+                  <InputWrapper>
+                    <DivFlex>
+                      {/* <BsCalendar
                       fill="#BBBBBB"
                       style={{ position: "absolute", margin: "15px 17px" }}
                     /> */}
-                    <InputMask
-                      style={{ paddingLeft: "45px" }}
-                      mask="99/99"
-                      maskChar={null}
-                      id="validityCard"
-                      placeholder="MM/AA"
-                    />
-                  </DivFlex>
-                </InputWrapper>
+                      <InputMask
+                        style={{ paddingLeft: "45px" }}
+                        mask="99/99"
+                        maskChar={null}
+                        id="validityCard"
+                        placeholder="MM/AA"
+                      />
+                    </DivFlex>
+                  </InputWrapper>
 
-                <InputWrapper>
-                  <DivFlex>
-                    {/* <FiLock
+                  <InputWrapper>
+                    <DivFlex>
+                      {/* <FiLock
                       color="#BBBBBB"
                       style={{ position: "absolute", margin: "15px 17px" }}
                     /> */}
-                    <InputMask
-                      style={{ paddingLeft: "45px" }}
-                      mask="9999"
-                      maskChar={null}
-                      id="codeCard"
-                      placeholder="CVV"
-                    />
-                  </DivFlex>
-                </InputWrapper>
-              </DivFlexNoWrap>
-              <InputMask id="payCard" placeholder="Parcelas" />
-              <ButtonCnt>
-                <Button onClick={formFirst}>
-                  <FiLock />
-                  FINALIZAR COMPRA
-                </Button>
-                <Text
-                  style={{
-                    color: "#28363d",
-                    fontSize: "0.813rem",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "5px",
-                  }}
-                >
-                  <FiLock />
-                  Protegemos seus dados de pagamento usando encriptação de alto
-                  nível
-                </Text>
-              </ButtonCnt>
-            </Accordion>
-
-            <InputWrapper
-              className="formPayPix"
-              style={{ borderTop: "1px solid #d9d9d9" }}
-            >
-              <Accordion title="PIX 12% OFF">
-                <Text style={{ color: "#000", marginBottom: "20px" }}>
-                  Clique em "Finalizar Compra" para gerar o PIX.
-                </Text>
-                <Text style={{ color: "#000", marginBottom: "20px" }}>
-                  Informações sobre o pagamento via PIX:
-                </Text>
-                <ul style={{ marginLeft: "40px" }}>
-                  <li>
-                    <Text style={{ color: "#000", lineHeight: "1" }}>
-                      Valor à vista R$ 87,91;
-                    </Text>
-                  </li>
-                  <li>
-                    <Text style={{ color: "#000", lineHeight: "1" }}>
-                      Não pode ser parcelado! Use cartão de crédito para
-                      parcelar sua compra;
-                    </Text>
-                  </li>
-                  <li>
-                    <Text style={{ color: "#000", lineHeight: "1" }}>
-                      Prazo de até 30 minutos para compensar.
-                    </Text>
-                  </li>
-                </ul>
+                      <InputMask
+                        style={{ paddingLeft: "45px" }}
+                        mask="9999"
+                        maskChar={null}
+                        id="codeCard"
+                        placeholder="CVV"
+                      />
+                    </DivFlex>
+                  </InputWrapper>
+                </DivFlexNoWrap>
+                <InputMask id="payCard" placeholder="Parcelas" />
                 <ButtonCnt>
                   <Button onClick={formFirst}>
                     <FiLock />
@@ -530,8 +498,68 @@ function Formulario() {
                     alto nível
                   </Text>
                 </ButtonCnt>
-              </Accordion>
-            </InputWrapper>
+              </AccordionItem>
+
+              <InputWrapper
+                className="formPayPix"
+                style={{ borderTop: "1px solid #d9d9d9" }}
+              >
+                <AccordionItem
+                  header={
+                    <DivHeaderAccordion>
+                      <Checkbox>
+                        <section></section>
+                      </Checkbox>
+                      <p>PIX 12% OFF</p>
+                    </DivHeaderAccordion>
+                  }
+                >
+                  <Text style={{ color: "#000", marginBottom: "20px" }}>
+                    Clique em "Finalizar Compra" para gerar o PIX.
+                  </Text>
+                  <Text style={{ color: "#000", marginBottom: "20px" }}>
+                    Informações sobre o pagamento via PIX:
+                  </Text>
+                  <ul style={{ marginLeft: "40px" }}>
+                    <li>
+                      <Text style={{ color: "#000", lineHeight: "1" }}>
+                        Valor à vista R$ 87,91;
+                      </Text>
+                    </li>
+                    <li>
+                      <Text style={{ color: "#000", lineHeight: "1" }}>
+                        Não pode ser parcelado! Use cartão de crédito para
+                        parcelar sua compra;
+                      </Text>
+                    </li>
+                    <li>
+                      <Text style={{ color: "#000", lineHeight: "1" }}>
+                        Prazo de até 30 minutos para compensar.
+                      </Text>
+                    </li>
+                  </ul>
+                  <ButtonCnt>
+                    <Button onClick={formFirst}>
+                      <FiLock />
+                      FINALIZAR COMPRA
+                    </Button>
+                    <Text
+                      style={{
+                        color: "#28363d",
+                        fontSize: "0.813rem",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                      }}
+                    >
+                      <FiLock />
+                      Protegemos seus dados de pagamento usando encriptação de
+                      alto nível
+                    </Text>
+                  </ButtonCnt>
+                </AccordionItem>
+              </InputWrapper>
+            </Accordion>
           </AccordionWrapper>
         </FormWrapper>
       </Content>

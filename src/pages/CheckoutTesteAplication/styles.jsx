@@ -130,7 +130,6 @@ export const InputWrapper = styled.div`
     font-size: 0.875rem;
     color: #6d7175;
   }
-
 `
 
 export const AccordionWrapper = styled.div`
@@ -155,24 +154,68 @@ export const AccordionWrapper = styled.div`
     border-radius: 5px;
   }
 
-  .accordion-button {
-    font-size: 0.875rem;
-    font-weight: 600;
-    text-align: left;
-    color: #202223;
+  .szh-accordion__item--status-entered h3 button div div {
+    background-color: #40b76a;
+    border: 1px solid #40b76a;
+  }
 
+  .szh-accordion__item {
+    &-btn {
+      cursor: pointer;
+    }
+
+    &-content {
+      transition: height 0.5s ease-in-out;
+    }
+  }
+
+  .szh-accordion__item-heading {
     width: 100%;
     max-width: 530px;
     padding: 15px;
     margin-top: 5px;
+  }
+
+  .szh-accordion__item-btn {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-align: left;
     background-color: #fff;
+    color: #202223;
     border: none;
   }
 
-  .accordion-body {
+  .szh-accordion__item-content {
     padding: 15px;
     height: auto;
     border-top: 1px solid #d9d9d9;
+  }
+`
+
+export const DivHeaderAccordion = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+`
+
+export const Checkbox = styled.div`
+  width: 15px;
+  height: 15px;
+  background-color: transparent;
+  border: 1px solid black;
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  section {
+    width: 4px;
+    height: 4px;
+    background-color: #fff;
+    border-radius: 50%;
   }
 `
 
@@ -198,7 +241,7 @@ export const SectionMobile = styled.div`
     padding: 3px;
   }
 
-  p {
+  div {
     font-size: 0.75rem;
     font-weight: 500;
     line-height: 20px;
@@ -218,24 +261,24 @@ export const SectionMobile = styled.div`
     border-radius: 5px;
   }
 
-  .accordion-button {
-    font-size: 0.875rem;
-    font-weight: 500;
-    text-align: left;
-    color: #202223;
+  .szh-accordion {
+    width: 100%;
+    padding: 5px 0;
+  }
 
+  .szh-accordion__item-heading {
     width: 100%;
     max-width: 530px;
     padding: 15px;
-    margin: 5px 0;
-    background-color: #fff;
-    border: none;
-  }
 
-  .accordion-body {
-    padding: 15px 0;
-    height: auto;
-    border-top: 1px solid #d9d9d9;
+    button {
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-align: left;
+      color: #202223;
+      background-color: #fff;
+      border: none;
+    }
   }
 `
 
@@ -305,7 +348,7 @@ export const Button = styled.button`
   font-size: 1.25rem;
   font-weight: 700;
   cursor: pointer;
-  transition: all .3s;
+  transition: all 0.3s;
 
   display: flex;
   justify-content: center;
