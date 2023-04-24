@@ -36,7 +36,7 @@ export const HeaderText = styled.p`
   color: #fff;
 `
 
-export const Cronometro = styled.p`
+export const CronometroStyle = styled.p`
   font-size: 1.125rem;
   font-weight: 600;
   color: #fcd742;
@@ -45,6 +45,8 @@ export const Cronometro = styled.p`
 export const Content = styled.div`
   width: 100%;
   margin: 0 15px;
+  display: flex;
+  justify-content: center;
 
   @media screen and (max-width: 490px) {
     margin: 0;
@@ -66,7 +68,10 @@ export const FormWrapper = styled.form`
 export const ImageGarantia = styled.img`
   width: 100%;
   max-width: 550px;
-  padding: 12px;
+
+  @media screen and (min-width: 990px) {
+    margin-top: 58px;
+  }
 `
 
 export const DivFlex = styled.div`
@@ -172,11 +177,12 @@ export const AccordionWrapper = styled.div`
   .szh-accordion__item-heading {
     width: 100%;
     max-width: 530px;
-    padding: 15px;
+    padding: 10px 15px;
     margin-top: 5px;
   }
 
   .szh-accordion__item-btn {
+    width: 100%;
     font-size: 0.875rem;
     font-weight: 600;
     text-align: left;
@@ -192,12 +198,36 @@ export const AccordionWrapper = styled.div`
   }
 `
 
-export const DivHeaderAccordion = styled.div`
+export const HeaderAccordion = styled.section`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+`
+
+export const HeaderAccordionLeft = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
   gap: 10px;
   cursor: pointer;
+`
+
+export const HeaderAccordionRight = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 25px;
+
+  p {
+    font-size: 0.75rem;
+    font-weight: 400;
+  }
+
+  img {
+    width: 40px;
+  }
 `
 
 export const Checkbox = styled.div`
@@ -249,16 +279,58 @@ export const SectionMobile = styled.div`
     color: #000;
   }
 
-  input {
-    width: 100%;
-    max-width: 500px;
+  p {
     font-size: 0.875rem;
-    font-weight: 400;
+  }
+
+  .szh-accordion {
+    width: 100%;
+    padding: 5px 0;
+  }
+
+  .szh-accordion__item-heading {
+    width: 100%;
+    max-width: 530px;
+    padding: 15px;
+
+    button {
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-align: left;
+      color: #202223;
+      background-color: #fff;
+      border: none;
+    }
+  }
+`
+
+export const SectionDesktop = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 41.666667%;
+
+  border-left: 1px solid #d9d9d9;
+  padding: 30px;
+
+  @media screen and (max-width: 990px) {
+    display: none;
+  }
+
+  img {
+    width: 60px;
+    height: 60px;
+    border: 1px solid #c9c9c9;
+    border-radius: 3px;
+    padding: 3px;
+  }
+
+  div {
+    font-size: 0.813rem;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0.4px;
     color: #000;
-    padding: 14px 20px;
-    margin-top: 12px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
   }
 
   .szh-accordion {
@@ -290,6 +362,17 @@ export const Quantidade = styled.div`
   font-size: 0.75rem;
   font-weight: 600;
   text-align: center;
+
+  @media screen and (min-width: 990px) {
+    width: 90px;
+    min-height: 40px;
+    padding: 5px 10px;
+    font-size: 0.813rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 `
 
 export const Cupom = styled.div`
@@ -316,12 +399,21 @@ export const ResumoPedido = styled.div`
     font-weight: 500;
     margin-bottom: 10px;
   }
+
+  @media screen and (min-width: 990px) {
+    border-bottom: 1px solid #d9d9d9;
+  }
 `
 
 export const Total = styled.h3`
   font-size: 1.125rem;
   font-weight: 500;
   color: #202223;
+
+  @media screen and (min-width: 990px) {
+    font-size: 1.063rem;
+    color: #000;
+  }
 `
 
 export const Label = styled.label`
@@ -356,5 +448,60 @@ export const Button = styled.button`
 
   &:hover {
     opacity: 0.8;
+  }
+`
+
+export const DivProtecao = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  @media screen and (max-width: 490px) {
+    align-items: flex-start;
+  }
+`
+
+export const DivError = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .error-border {
+    border: 1px solid red;
+  }
+`
+
+export const ErrorText = styled.p`
+  font-size: 0.813rem;
+  color: red;
+  margin-top: -5px;
+`
+
+export const Beneficios = styled.div`
+  width: 100%;
+  max-width: 530px;
+  margin-top: 44px;
+  padding: 20px 25px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #202223;
+    margin-bottom: 5px;
+  }
+
+  p {
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.5;
+    word-break: break-word;
+  }
+
+  img {
+    width: 64px;
+    height: 64px;
   }
 `

@@ -3,6 +3,8 @@ import InputMask from "react-input-mask"
 import axios from "axios"
 import * as cardValidator from "card-validator"
 import CPF from "cpf-check"
+import Cronometro from "./Cronometro"
+// import { ImageSecurity } from "./assets/security.png"
 import "./styles"
 
 import { Accordion, AccordionItem } from "@szhsin/react-accordion"
@@ -15,6 +17,14 @@ import {
 } from "react-icons/bs"
 
 import { FiLock } from "react-icons/fi"
+import { IoIosArrowUp } from "react-icons/io"
+import { MdSecurity } from "react-icons/md"
+import {
+  FaCcVisa,
+  FaCcMastercard,
+  FaCcAmex,
+  FaCcDinersClub,
+} from "react-icons/fa"
 
 import {
   Container,
@@ -26,7 +36,7 @@ import {
   HeaderPromotion,
   HeaderText,
   DivFlex,
-  Cronometro,
+  CronometroStyle,
   Content,
   ImageGarantia,
   TitleSection,
@@ -41,7 +51,14 @@ import {
   ResumoPedido,
   Total,
   Checkbox,
-  DivHeaderAccordion,
+  HeaderAccordion,
+  SectionDesktop,
+  DivProtecao,
+  DivError,
+  ErrorText,
+  HeaderAccordionLeft,
+  HeaderAccordionRight,
+  Beneficios,
 } from "./styles"
 
 function Formulario() {
@@ -199,7 +216,9 @@ function Formulario() {
           <HeaderText style={{ marginRight: "5px" }}>
             Promoção especial encerra em:
           </HeaderText>
-          <Cronometro>00:00</Cronometro>
+          <CronometroStyle>
+            <Cronometro />
+          </CronometroStyle>
         </DivFlexHeader>
       </HeaderPromotion>
 
@@ -212,7 +231,21 @@ function Formulario() {
 
           <SectionMobile>
             <Accordion>
-              <AccordionItem header="Resumo do pedido" show>
+              <AccordionItem
+                header={
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                    }}
+                  >
+                    <IoIosArrowUp fill="#897977" />
+                    <p>Resumo do Pedido</p>
+                  </div>
+                }
+                initialEntered
+              >
                 <div
                   id="detalhesProduto"
                   style={{
@@ -250,7 +283,7 @@ function Formulario() {
                     <Quantidade>- &nbsp;&nbsp; 1 &nbsp;&nbsp; +</Quantidade>
                   </div>
                 </div>
-                <Cupom id="cupom">
+                <Cupom id="cupom" style={{ color: "#1e55f5" }}>
                   Tem cupom de desconto ou vale presente?
                 </Cupom>
                 <ResumoPedido id="resumoPedido">
@@ -306,51 +339,51 @@ function Formulario() {
               />
             </InputWrapper>
 
-            <InputWrapper>
-              <InputMask
-                type="text"
-                id="cpf"
-                mask="999.999.999-99"
-                maskChar={null}
-                value={cpf}
-                onBlur={validateCPF}
-                onChange={(event) => setCpf(event.target.value)}
-                placeholder="CPF*"
-              />
-            </InputWrapper>
-
-            {errorCPF && (
+            <DivError>
               <InputWrapper>
-                <span>{errorCPF}</span>
+                <InputMask
+                  type="text"
+                  id="cpf"
+                  className={errorCPF ? "error-border" : ""}
+                  mask="999.999.999-99"
+                  maskChar={null}
+                  value={cpf}
+                  onBlur={validateCPF}
+                  onChange={(event) => setCpf(event.target.value)}
+                  placeholder="CPF*"
+                />
               </InputWrapper>
-            )}
+              {errorCPF && <ErrorText>{errorCPF}</ErrorText>}
+            </DivError>
           </DivFlex>
 
           <TitleSection>Informações de Entrega</TitleSection>
           <Text>Para onde devemos entregar o pedido?</Text>
 
-          <InputWrapper style={{ flexDirection: "row", alignItems: "center" }}>
-            <InputMask
-              style={{ maxWidth: "186px" }}
-              mask="99999-999"
-              maskChar={null}
-              id="cep"
-              placeholder="CEP*"
-              value={cep}
-              onChange={handleCepChange}
-            />
-            {showAddress && logradouro && bairro && cidade && estado && (
-              <span>
-                {cidade}/{estado}
-              </span>
-            )}
-          </InputWrapper>
-
-          {errorCEP && (
-            <InputWrapper>
-              <span>{errorCEP}</span>
+          <DivError>
+            <InputWrapper
+              style={{ flexDirection: "row", alignItems: "center" }}
+            >
+              <InputMask
+                style={{ maxWidth: "186px" }}
+                mask="99999-999"
+                maskChar={null}
+                id="cep"
+                className={errorCEP ? "error-border" : ""}
+                placeholder="CEP*"
+                value={cep}
+                onChange={handleCepChange}
+              />
+              {showAddress && logradouro && bairro && cidade && estado && (
+                <span>
+                  {cidade}/{estado}
+                </span>
+              )}
             </InputWrapper>
-          )}
+
+            {errorCEP && <ErrorText>{errorCEP}</ErrorText>}
+          </DivError>
+
           {showAddress && logradouro && bairro && cidade && estado && (
             <div>
               <DivFlex>
@@ -405,40 +438,52 @@ function Formulario() {
             <Accordion>
               <AccordionItem
                 header={
-                  <DivHeaderAccordion>
-                    <Checkbox>
-                      <section></section>
-                    </Checkbox>
-                    <p>Cartão de crédito</p>
-                  </DivHeaderAccordion>
+                  <HeaderAccordion>
+                    <HeaderAccordionLeft>
+                      <Checkbox>
+                        <section></section>
+                      </Checkbox>
+                      <p>Cartão de crédito</p>
+                    </HeaderAccordionLeft>
+                    <HeaderAccordionRight>
+                      <FaCcVisa size={25} fill="#142688" />
+                      <FaCcAmex size={25} fill="#006FCF" />
+                      <FaCcMastercard size={25} />
+                      <FaCcDinersClub size={25} fill="#3086C8" />
+                      <p>E mais...</p>
+                    </HeaderAccordionRight>
+                  </HeaderAccordion>
                 }
                 initialEntered
               >
-                <DivFlex>
-                  {/* <BsCreditCard
-                  fill="#BBBBBB"
-                  style={{ position: "absolute", margin: "15px 17px" }}
-                /> */}
-                  <InputMask
-                    style={{ paddingLeft: "45px" }}
-                    mask="9999 9999 9999 9999"
-                    maskChar={null}
-                    id="creditCard"
-                    placeholder="Número do cartão"
-                    onChange={handleCardValidation}
-                  />
-                </DivFlex>
-                {errorCard && (
-                  <InputWrapper>
-                    <span>{errorCard}</span>
-                  </InputWrapper>
-                )}
+                <DivError>
+                  <DivFlex>
+                    <BsCreditCard
+                      fill="#BBBBBB"
+                      style={{ position: "absolute", margin: "27px 17px" }}
+                    />
+                    <InputMask
+                      style={{ paddingLeft: "45px" }}
+                      mask="9999 9999 9999 9999"
+                      maskChar={null}
+                      id="creditCard"
+                      className={errorCard ? "error-border" : ""}
+                      placeholder="Número do cartão"
+                      onChange={handleCardValidation}
+                    />
+                  </DivFlex>
+                  {errorCard && (
+                    <ErrorText style={{ marginTop: "3px" }}>
+                      {errorCard}
+                    </ErrorText>
+                  )}
+                </DivError>
 
                 <DivFlex>
-                  {/* <BsFillPersonFill
-                  fill="#BBBBBB"
-                  style={{ position: "absolute", margin: "15px 17px" }}
-                /> */}
+                  <BsFillPersonFill
+                    fill="#BBBBBB"
+                    style={{ position: "absolute", margin: "27px 17px" }}
+                  />
                   <InputMask
                     id="nameCard"
                     placeholder="Nome impresso no cartão"
@@ -448,10 +493,10 @@ function Formulario() {
                 <DivFlexNoWrap>
                   <InputWrapper>
                     <DivFlex>
-                      {/* <BsCalendar
-                      fill="#BBBBBB"
-                      style={{ position: "absolute", margin: "15px 17px" }}
-                    /> */}
+                      <BsCalendar
+                        fill="#BBBBBB"
+                        style={{ position: "absolute", margin: "26px 17px" }}
+                      />
                       <InputMask
                         style={{ paddingLeft: "45px" }}
                         mask="99/99"
@@ -464,10 +509,10 @@ function Formulario() {
 
                   <InputWrapper>
                     <DivFlex>
-                      {/* <FiLock
-                      color="#BBBBBB"
-                      style={{ position: "absolute", margin: "15px 17px" }}
-                    /> */}
+                      <FiLock
+                        color="#BBBBBB"
+                        style={{ position: "absolute", margin: "26px 17px" }}
+                      />
                       <InputMask
                         style={{ paddingLeft: "45px" }}
                         mask="9999"
@@ -484,19 +529,21 @@ function Formulario() {
                     <FiLock />
                     FINALIZAR COMPRA
                   </Button>
-                  <Text
-                    style={{
-                      color: "#28363d",
-                      fontSize: "0.813rem",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "5px",
-                    }}
-                  >
-                    <FiLock />
-                    Protegemos seus dados de pagamento usando encriptação de
-                    alto nível
-                  </Text>
+                  <DivProtecao>
+                    <div>
+                      <MdSecurity size={16} color="#28363d" />
+                    </div>
+                    <Text
+                      style={{
+                        fontSize: "0.75rem",
+                        color: "#28363d",
+                        marginBottom: "0",
+                      }}
+                    >
+                      Protegemos seus dados de pagamento usando encriptação de
+                      alto nível
+                    </Text>
+                  </DivProtecao>
                 </ButtonCnt>
               </AccordionItem>
 
@@ -506,12 +553,20 @@ function Formulario() {
               >
                 <AccordionItem
                   header={
-                    <DivHeaderAccordion>
-                      <Checkbox>
-                        <section></section>
-                      </Checkbox>
-                      <p>PIX 12% OFF</p>
-                    </DivHeaderAccordion>
+                    <HeaderAccordion>
+                      <HeaderAccordionLeft>
+                        <Checkbox>
+                          <section></section>
+                        </Checkbox>
+                        <p>PIX 12% OFF</p>
+                      </HeaderAccordionLeft>
+                      <HeaderAccordionRight>
+                        <img
+                          src="https://adquirindo.mycartpanda.com/images/payment/pix.svg"
+                          alt="Ícone do Pix"
+                        />
+                      </HeaderAccordionRight>
+                    </HeaderAccordion>
                   }
                 >
                   <Text style={{ color: "#000", marginBottom: "20px" }}>
@@ -522,18 +577,36 @@ function Formulario() {
                   </Text>
                   <ul style={{ marginLeft: "40px" }}>
                     <li>
-                      <Text style={{ color: "#000", lineHeight: "1" }}>
-                        Valor à vista R$ 87,91;
+                      <Text
+                        style={{
+                          color: "#000",
+                          lineHeight: "1",
+                          marginBottom: "5px",
+                        }}
+                      >
+                        Valor à vista <strong>R$ 87,91</strong>;
                       </Text>
                     </li>
                     <li>
-                      <Text style={{ color: "#000", lineHeight: "1" }}>
+                      <Text
+                        style={{
+                          color: "#000",
+                          lineHeight: "1",
+                          marginBottom: "5px",
+                        }}
+                      >
                         Não pode ser parcelado! Use cartão de crédito para
                         parcelar sua compra;
                       </Text>
                     </li>
                     <li>
-                      <Text style={{ color: "#000", lineHeight: "1" }}>
+                      <Text
+                        style={{
+                          color: "#000",
+                          lineHeight: "1",
+                          marginBottom: "15px",
+                        }}
+                      >
                         Prazo de até 30 minutos para compensar.
                       </Text>
                     </li>
@@ -543,25 +616,160 @@ function Formulario() {
                       <FiLock />
                       FINALIZAR COMPRA
                     </Button>
-                    <Text
-                      style={{
-                        color: "#28363d",
-                        fontSize: "0.813rem",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "5px",
-                      }}
-                    >
-                      <FiLock />
-                      Protegemos seus dados de pagamento usando encriptação de
-                      alto nível
-                    </Text>
+                    <DivProtecao>
+                      <div>
+                        <MdSecurity size={16} color="#28363d" />
+                      </div>
+                      <Text
+                        style={{
+                          fontSize: "0.75rem",
+                          color: "#28363d",
+                          marginBottom: "0",
+                        }}
+                      >
+                        Protegemos seus dados de pagamento usando encriptação de
+                        alto nível
+                      </Text>
+                    </DivProtecao>
                   </ButtonCnt>
                 </AccordionItem>
               </InputWrapper>
             </Accordion>
           </AccordionWrapper>
+
+          <Beneficios>
+            <p>Benefícios exclusivos para você:</p>
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                marginTop: "25px",
+              }}
+            >
+              <img src="" alt="" />
+              <div style={{ marginLeft: "50px" }}>
+                <h3>Pagamento 100% Seguro</h3>
+                <p>
+                  Nossos pagamentos são processados pelo AppMax, a plataforma de
+                  pagamentos online mais segura da América Latina.
+                </p>
+              </div>
+            </div>
+
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                marginTop: "25px",
+              }}
+            >
+              <img src="" alt="" />
+              <div style={{ marginLeft: "50px" }}>
+                <h3>Avaliações Positivas</h3>
+                <p>
+                  Histórico excelente de atendimento ao cliente. Já são mais de
+                  12.000 pedidos entregues em todo Brasil.
+                </p>
+              </div>
+            </div>
+
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                marginTop: "25px",
+              }}
+            >
+              <img src="" alt="" />
+              <div style={{ marginLeft: "50px" }}>
+                <h3>Garantia de Reenbolso</h3>
+                <p>
+                  Receba sua compra ou nossa equipe devolverá todo seu dinheiro
+                  de volta na sua conta em poucos minutos.
+                </p>
+              </div>
+            </div>
+
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                marginTop: "25px",
+              }}
+            >
+              <img src="" alt="" />
+              <div style={{ marginLeft: "50px" }}>
+                <h3>Parcele em até 12x no cartão</h3>
+                <p>
+                  As compras realizadas pelo cartão de crédito possuem segurança
+                  antifraude. Por o pagamento debitar na hora, é processado e
+                  enviado mais rapidamente.
+                </p>
+              </div>
+            </div>
+          </Beneficios>
         </FormWrapper>
+
+        <SectionDesktop>
+          <div
+            id="detalhesProduto"
+            style={{
+              display: "flex",
+              justifyContent: "space-around",
+              alignItems: "center",
+              padding: "15px",
+            }}
+          >
+            <img
+              src="https://thumbor.cartpanda.com/OiCUsJv_s3NQdbJmD-4oUX6yKTA=/64x0/https://assets.mycartpanda.com/static/products_images/2xO8vbpB6kJ6W4ieo2VvEJiyg4qYZl.jpg"
+              alt="Imagem do Produto"
+            />
+            <div style={{ padding: "0 15px", width: "100%" }}>
+              BoneLink 7.1™ - COMPRE 1 LEVE 2
+              <p
+                style={{
+                  fontSize: "1rem",
+                  fontWeight: "600",
+                  letterSpacing: "0.4px",
+                  color: "#202223",
+                  marginTop: "3px",
+                }}
+              >
+                R$ 99,90
+              </p>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-end",
+                gap: "5px",
+              }}
+            >
+              <Quantidade style={{ fontWeight: "600" }}>
+                - &nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp; +
+              </Quantidade>
+            </div>
+          </div>
+          <Cupom id="cupom" style={{ color: "#1e55f5", fontSize: "0.75rem" }}>
+            Tem cupom de desconto ou vale presente?
+          </Cupom>
+          <ResumoPedido id="resumoPedido">
+            <div>
+              <p>Subtotal</p>
+              <p>Entrega</p>
+              <p>Desconto cartão</p>
+              <Total>Total</Total>
+            </div>
+            <div style={{ textAlign: "end" }}>
+              <p>R$ 99,90</p>
+              <p>---</p>
+              <p>- R$ 0,00</p>
+              <Total>12x de R$ 10,03*</Total>
+              <p style={{ fontSize: "0.625rem" }}>OU R$ 99,90 À VISTA</p>
+            </div>
+          </ResumoPedido>
+        </SectionDesktop>
       </Content>
     </Container>
   )
