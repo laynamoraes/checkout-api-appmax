@@ -2,8 +2,8 @@
 - Implementar lógica para os valores dos produtos;
 - Implementar módulo de PARCELAS;
 - Implementar campos obrigatórios do formulário, para não permitir que o cliente o envie com dados faltando.
-- Confirmar sobre botão de quantidade;
-- Confirmar sobre campo de cupom;
+- Implementar botão de quantidade;
+  ✅ Confirmar sobre campo de cupom (não implementaremos);
   ✅ Implementar cronômetro;
   ✅ Arrumar avisos de erros nos inputs;
   ✅ Arrumar ícones dos inputs de cartão de crédito;

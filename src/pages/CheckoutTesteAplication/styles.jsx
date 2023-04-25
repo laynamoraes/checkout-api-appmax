@@ -36,7 +36,7 @@ export const HeaderText = styled.p`
   color: #fff;
 `
 
-export const CronometroStyle = styled.p`
+export const CronometroStyle = styled.div`
   font-size: 1.125rem;
   font-weight: 600;
   color: #fcd742;
@@ -355,13 +355,40 @@ export const SectionDesktop = styled.div`
 `
 
 export const Quantidade = styled.div`
-  width: 56px;
+  width: 100%;
+  max-width: 76px;
   min-height: 20px;
   border: 1px solid #eaedf1;
   border-radius: 4px;
   font-size: 0.75rem;
   font-weight: 600;
   text-align: center;
+
+  input {
+    width: 50%;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+    border: none;
+  }
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    appearance: none;
+    -moz-appearance: textfield;
+  }
+
+  button {
+    background-color: transparent;
+    border: none;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+  }
 
   @media screen and (min-width: 990px) {
     width: 90px;
@@ -379,6 +406,7 @@ export const Cupom = styled.div`
   width: 100%;
   font-size: 0.813rem;
   font-weight: 500;
+  cursor: pointer;
   color: #1e55f5;
   padding: 15px;
   border-top: 1px solid #d9d9d9;
@@ -503,5 +531,24 @@ export const Beneficios = styled.div`
   img {
     width: 64px;
     height: 64px;
+    object-fit: cover;
+  }
+`
+
+export const ImageLoja = styled.div`
+  width: 100%;
+  max-width: 530px;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+
+  img {
+    width: 213px;
+    height: 71px;
+
+    @media screen and (max-width: 490px) {
+      width: 185px;
+      height: 61.663px;
+    }
   }
 `

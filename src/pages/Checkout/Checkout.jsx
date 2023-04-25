@@ -3,124 +3,130 @@ import { HeaderPromotion } from "../../components/HeaderPromotion"
 import { LogoComBanner } from "../../components/LogoComBanner"
 import { GlobalStyle } from "../../styles/global"
 
-import { FrameDefault } from './db';
-import axios from 'axios';
+import { FrameDefault } from "./db"
+import axios from "axios"
 
-import {
-  Container,
-} from "./styles"
+import { Container } from "./styles"
+
+// Página Pix QrCode
+// import { PaymentPix } from "../../components/PaymentePix"
 
 function Checkout() {
   const Db = FrameDefault
 
-  const accessToken = '8D479FDE-06804C4D-CE2E17D2-8180D7D1';
+  const accessToken = "728776C4-7332E832-A81AE536-24CB2461"
 
   function handleSubmit() {
-
     const postCustomer = {
       "access-token": accessToken,
-      "firstname": "Jose",
-      "lastname": "Paga Pix",
-      "email": "josesilvapix.contato@gmail.com",
-      "telephone": "(12) 4341-1282",
-      "postcode": "65039-123",
-      "address_street": "Rua Av Vicente",
-      "address_street_number": "1343",
-      "address_street_complement": "Bloco 112",
-      "address_street_district": "Centro",
-      "address_city": "São Paulo",
-      "address_state": "SP",
-      "ip": "127.0.0.8",
-      "custom_txt": "Tênis de Corrida 39",
-      "products": [
+      firstname: "Teste",
+      lastname: "Teste",
+      email: "testecheckout02@teste.com",
+      telephone: "(12) 98104-1282",
+      postcode: "65039-123",
+      address_street: "Rua Av Vicente",
+      address_street_number: "1343",
+      address_street_complement: "Bloco 112",
+      address_street_district: "Centro",
+      address_city: "São Paulo",
+      address_state: "SP",
+      ip: "127.0.0.8",
+      custom_txt: "Tênis de Corrida 39",
+      products: [
         {
-          "product_sku": "123456",
-          "product_qty": 2
-        }
+          product_sku: "123456",
+          product_qty: 2,
+        },
       ],
-      "tracking":
-      {
-        "utm_source": "google",
-        "utm_campaign": "black-friday",
-        "utm_medium": "cpc",
-        "utm_content": "tenis-corrida",
-        "utm_term": "logo-link"
-      }
-    };
+      tracking: {
+        utm_source: "google",
+        utm_campaign: "black-friday",
+        utm_medium: "cpc",
+        utm_content: "tenis-corrida",
+        utm_term: "logo-link",
+      },
+    }
 
     const headers = {
-      'access-token': accessToken,
-    };
+      "access-token": accessToken,
+    }
 
-    axios.post('https://homolog.sandboxappmax.com.br/api/v3/customer', postCustomer, { headers })
-      .then(response => {
-        console.log(response.data, "CLIENTE ✅");
+    axios
+      .post("https://admin.appmax.com.br/api/v3/customer", postCustomer, {
+        headers,
+      })
+      .then((response) => {
+        console.log(response.data, "CLIENTE ✅")
         // const orderId = response.data.order_id;
         const postOrder = {
           "access-token": accessToken,
-          "total": 249.87,
-          "products": [
+          total: 10.0,
+          products: [
             {
-              "sku": "123123",
-              "name": "My product 1",
-              "qty": 1
+              sku: "123123",
+              name: "My product 1",
+              qty: 1,
             },
             {
-              "sku": "234234",
-              "name": "My product 2",
-              "qty": 2,
-              "digital_product": 1
-            }
+              sku: "234234",
+              name: "My product 2",
+              qty: 2,
+              digital_product: 1,
+            },
           ],
-          "shipping": 39.90,
-          "customer_id": response.data.data.id,
-          "discount": 0,
-          "freight_type": "PAC"
-        };
-        axios.post('https://homolog.sandboxappmax.com.br/api/v3/order', postOrder, { headers })
-          .then(response => {
-            console.log(response.data, "ORDEM ✅");
+          shipping: 0.0,
+          customer_id: response.data.data.id,
+          discount: 0,
+          freight_type: "PAC",
+        }
+        axios
+          .post("https://admin.appmax.com.br/api/v3/order", postOrder, {
+            headers,
+          })
+          .then((response) => {
+            console.log(response.data, "ORDEM ✅")
 
             const paymentForm = {
               "access-token": accessToken,
-              "cart":
-              {
-                "order_id": response.data.data.id
+              cart: {
+                order_id: response.data.data.id,
               },
-              "customer":
-              {
-                "customer_id": response.data.data.customer_id
+              customer: {
+                customer_id: response.data.data.customer_id,
               },
-              "payment":
-              {
-                "pix":
-                {
-                  "document_number": "99999999999",
-                  "expiration_date": "2021-10-11 12:00:00",
-                }
-              }
+              payment: {
+                CreditCard: {
+                  number: "",
+                  cvv: "",
+                  month: 4,
+                  year: 28,
+                  document_number: "",
+                  name: "teste teste",
+                  installments: 12,
+                  soft_descriptor: "MYSTORE",
+                },
+              },
             }
-
-
-
-
-            axios.post(`https://homolog.sandboxappmax.com.br/api/v3/payment/bolet`, paymentForm, { headers })
-              .then(response => {
+            axios
+              .post(
+                `https://admin.appmax.com.br/api/v3/payment/credit-card`,
+                paymentForm,
+                { headers }
+              )
+              .then((response) => {
                 console.log(response.data, "DEU CERTO O PAGAMENTO ✅")
               })
-              .catch(error => {
+              .catch((error) => {
                 console.error(error, "DEU ERRADO")
               })
-
           })
-          .catch(error => {
-            console.error(error);
-          });
+          .catch((error) => {
+            console.error(error)
+          })
       })
-      .catch(error => {
-        console.error(error);
-      });
-
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
   return (
@@ -134,15 +140,13 @@ function Checkout() {
           prazoValidade={Db.BannerSup.prazoValidade}
         />
         <LogoComBanner logo={Db.LogoMarca.link} AltLogo={Db.LogoMarca.alt} />
-
       </section>
 
-      <button onClick={handleSubmit} type="submit">Pagar</button>
-
+      <button onClick={handleSubmit} type="submit">
+        Pagar
+      </button>
     </Container>
   )
 }
-
-
 
 export default Checkout

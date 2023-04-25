@@ -8,12 +8,12 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom"
 // import DispensaPortatil from "./pages/dispensa-portatil/DispensaPortatil"
 // import PistolaVap from "./pages/pistola-alta-pressao/PistolaVap"
 // import ConjuntoToalhas from "./pages/conjunto-toalhas/ConjuntoToalhas"
-// import PortaSapatos from "./pages/porta-sapatos/PortaSpatos"
+import PortaSapatos from "./pages/porta-sapatos/PortaSpatos"
 import Home from "./pages/Home/Home"
 // import DuvidaseRastreio from "./pages/DuvidaseRastreio/DuvidaseRastreio"
 import Checkout from "./pages/Checkout/Checkout"
 import CheckoutTeste from "./pages/CheckoutTesteAplication/CheckoutTeste"
-import AddressForm from "./pages/CheckoutTesteAplication/baseCedLayna"
+// import AddressForm from "./pages/CheckoutTesteAplication/baseCedLayna"
 
 const router = createBrowserRouter([
   {
@@ -29,13 +29,13 @@ const router = createBrowserRouter([
     element: <CheckoutTeste />,
   },
   {
-    path: "checkout-layna",
-    element: <AddressForm />,
-  }
+    path: "porta-sapatos",
+    element: <PortaSapatos />,
+  },
 ])
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
   <RouterProvider router={router} />
   // </React.StrictMode>
-) 
+)

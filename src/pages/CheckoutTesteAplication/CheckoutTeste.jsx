@@ -4,7 +4,10 @@ import axios from "axios"
 import * as cardValidator from "card-validator"
 import CPF from "cpf-check"
 import Cronometro from "./Cronometro"
-// import { ImageSecurity } from "./assets/security.png"
+import ImageSecurity from "./assets/security.png"
+import ImageFeedback from "./assets/feedback-positive.png"
+import ImageReembolso from "./assets/reembolso.png"
+import ImageCards from "./assets/cards.png"
 import "./styles"
 
 import { Accordion, AccordionItem } from "@szhsin/react-accordion"
@@ -59,6 +62,7 @@ import {
   HeaderAccordionLeft,
   HeaderAccordionRight,
   Beneficios,
+  ImageLoja,
 } from "./styles"
 
 function Formulario() {
@@ -76,6 +80,11 @@ function Formulario() {
   const [cidade, setCidade] = useState("")
   const [estado, setEstado] = useState("")
   const [showAddress, setShowAddress] = useState("")
+
+  const [nameCard, setNameCard] = useState("")
+  const [numberCard, setNumberCard] = useState("")
+  const [validityCard, setValidityCard] = useState("")
+  const [cvvCard, setCvvCard] = useState("")
 
   const [errorCEP, setErrorCEP] = useState("")
   const [errorCard, setErrorCard] = useState("")
@@ -126,6 +135,31 @@ function Formulario() {
         utm_term: "logo-link",
       },
     }
+
+    const [monthCard, yearCard] = validityCard.split("/")
+    const postCreditCard = {
+      "access-token": acessToken,
+      cart: {
+        order_id: 345678,
+      },
+      customer: {
+        customer_id: 123456,
+      },
+      payment: {
+        CreditCard: {
+          number: numberCard,
+          cvv: cvvCard,
+          month: monthCard,
+          year: yearCard,
+          document_number: "191.000.000-00",
+          name: nameCard,
+          installments: 12,
+          soft_descriptor: "MYSTORE",
+        },
+      },
+    }
+
+    console.log(postCreditCard)
 
     console.log(postCostumer)
 
@@ -280,7 +314,11 @@ function Formulario() {
                     >
                       R$ 99,90
                     </p>
-                    <Quantidade>- &nbsp;&nbsp; 1 &nbsp;&nbsp; +</Quantidade>
+                    <Quantidade>
+                      <button>-</button>
+                      <input type="number" name="quantity" value={1} min={1} />
+                      <button>+</button>
+                    </Quantidade>
                   </div>
                 </div>
                 <Cupom id="cupom" style={{ color: "#1e55f5" }}>
@@ -423,6 +461,8 @@ function Formulario() {
                     type="text"
                     id="complemento"
                     placeholder="Complemento"
+                    value={complemento}
+                    onChange={(event) => setComplemento(event.target.value)}
                   />
                 </InputWrapper>
               </DivFlex>
@@ -469,7 +509,9 @@ function Formulario() {
                       id="creditCard"
                       className={errorCard ? "error-border" : ""}
                       placeholder="Número do cartão"
-                      onChange={handleCardValidation}
+                      value={numberCard}
+                      onBlur={handleCardValidation}
+                      onChange={(event) => setNumberCard(event.target.value)}
                     />
                   </DivFlex>
                   {errorCard && (
@@ -488,6 +530,8 @@ function Formulario() {
                     id="nameCard"
                     placeholder="Nome impresso no cartão"
                     style={{ paddingLeft: "45px" }}
+                    value={nameCard}
+                    onChange={(event) => setNameCard(event.target.value)}
                   />
                 </DivFlex>
                 <DivFlexNoWrap>
@@ -503,6 +547,10 @@ function Formulario() {
                         maskChar={null}
                         id="validityCard"
                         placeholder="MM/AA"
+                        value={validityCard}
+                        onChange={(event) =>
+                          setValidityCard(event.target.value)
+                        }
                       />
                     </DivFlex>
                   </InputWrapper>
@@ -519,6 +567,8 @@ function Formulario() {
                         maskChar={null}
                         id="codeCard"
                         placeholder="CVV"
+                        value={cvvCard}
+                        onChange={(event) => setCvvCard(event.target.value)}
                       />
                     </DivFlex>
                   </InputWrapper>
@@ -643,11 +693,15 @@ function Formulario() {
               style={{
                 width: "100%",
                 display: "flex",
+                gap: "10px",
+                alignItems: "flex-start",
                 marginTop: "25px",
               }}
             >
-              <img src="" alt="" />
-              <div style={{ marginLeft: "50px" }}>
+              <div>
+                <img src={ImageSecurity} alt="Ícone Pagamento Seguro" />
+              </div>
+              <div>
                 <h3>Pagamento 100% Seguro</h3>
                 <p>
                   Nossos pagamentos são processados pelo AppMax, a plataforma de
@@ -660,11 +714,15 @@ function Formulario() {
               style={{
                 width: "100%",
                 display: "flex",
+                gap: "10px",
+                alignItems: "flex-start",
                 marginTop: "25px",
               }}
             >
-              <img src="" alt="" />
-              <div style={{ marginLeft: "50px" }}>
+              <div>
+                <img src={ImageFeedback} alt="Ícone avaliações positivas" />
+              </div>
+              <div>
                 <h3>Avaliações Positivas</h3>
                 <p>
                   Histórico excelente de atendimento ao cliente. Já são mais de
@@ -677,12 +735,16 @@ function Formulario() {
               style={{
                 width: "100%",
                 display: "flex",
+                gap: "10px",
+                alignItems: "flex-start",
                 marginTop: "25px",
               }}
             >
-              <img src="" alt="" />
-              <div style={{ marginLeft: "50px" }}>
-                <h3>Garantia de Reenbolso</h3>
+              <div>
+                <img src={ImageReembolso} alt="Ícone de reembolso" />
+              </div>
+              <div>
+                <h3>Garantia de Reembolso</h3>
                 <p>
                   Receba sua compra ou nossa equipe devolverá todo seu dinheiro
                   de volta na sua conta em poucos minutos.
@@ -694,11 +756,15 @@ function Formulario() {
               style={{
                 width: "100%",
                 display: "flex",
+                gap: "10px",
+                alignItems: "flex-start",
                 marginTop: "25px",
               }}
             >
-              <img src="" alt="" />
-              <div style={{ marginLeft: "50px" }}>
+              <div>
+                <img src={ImageCards} alt="Ícone de cartões" />
+              </div>
+              <div>
                 <h3>Parcele em até 12x no cartão</h3>
                 <p>
                   As compras realizadas pelo cartão de crédito possuem segurança
@@ -708,6 +774,13 @@ function Formulario() {
               </div>
             </div>
           </Beneficios>
+
+          <ImageLoja>
+            <img
+              src="https://assets.mycartpanda.com/static/theme_images/d0/0d/07/290462_2797921766.png"
+              alt=""
+            />
+          </ImageLoja>
         </FormWrapper>
 
         <SectionDesktop>
