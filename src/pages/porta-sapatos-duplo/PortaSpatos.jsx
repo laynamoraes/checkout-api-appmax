@@ -34,10 +34,11 @@ import ObsDownButton from "../../components/ObsDownButton"
 
 function PortaSapatos() {
   const Db = FrameDefault
+  const { id } = useParams()
   const navigate = useNavigate()
 
   const handleCheckout = () => {
-    navigate(`/checkout-teste/${Db.id}`)
+    navigate(`/checkout/${id}`)
   }
 
   const campoRef = useRef(null)
@@ -110,7 +111,8 @@ function PortaSapatos() {
               <Button
                 title="COMPRAR AGORA"
                 definedClick={handleCheckout}
-              ></Button>
+              >
+              </Button>
 
               <ObsDownButton
                 infoCupom={Db.infoCupom.infoCupom}

@@ -1,5 +1,5 @@
 export const FrameDefault = {
-  id: 1,
+  productId: 2,
   BannerSup: {
     descricaoPromocao: "PROMOÇÃO 50% OFF+FRETE GRÁTIS",
     desconto: "DESCONTO",
@@ -31,8 +31,8 @@ export const FrameDefault = {
   ],
 
   Price: {
-    tituloProduto: "Porta Sapatos Moderno de Vidro + Brinde Exclusivo",
-    preco: 157.91,
+    tituloProduto: "Porta Sapatos Moderno de Vidro Duplo",
+    preco: 249.99,
     precoPix: function () {
       return (this.preco - this.preco * 0.12).toFixed(2)
     },

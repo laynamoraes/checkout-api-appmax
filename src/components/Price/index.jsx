@@ -135,7 +135,7 @@ const Price = ({
           </ContainerPay>
 
           {openCard && (
-            <InfoCreditCard cla ssName="creditoPay">
+            <InfoCreditCard className="creditoPay">
               <RowModalLight>
                 <TextModalLeft>
                   <strong>1x</strong> de <strong>R$ {valorTotal} </strong>

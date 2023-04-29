@@ -57,7 +57,6 @@ export const Content = styled.div`
 export const FormWrapper = styled.form`
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
   padding: 10px 60px 20px 30px;
 
   @media screen and (max-width: 490px) {
@@ -65,9 +64,21 @@ export const FormWrapper = styled.form`
   }
 `
 
+export const ImageGarantiaCnt = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`
+
 export const ImageGarantia = styled.img`
   width: 100%;
   max-width: 550px;
+  margin-bottom: 20px;
+
+  @media screen and (max-width: 490px) {
+    max-width: 350px;
+    margin-top: 10px;
+  }
 
   @media screen and (min-width: 990px) {
     margin-top: 58px;
@@ -117,6 +128,7 @@ export const InputWrapper = styled.div`
   margin-bottom: 10px;
   width: 100%;
   max-width: 530px;
+  position: relative;
 
   input {
     font-weight: 400;
@@ -126,6 +138,23 @@ export const InputWrapper = styled.div`
     border-radius: 5px;
     font-size: 0.875rem;
     width: 100%;
+    min-height: 46.4px;
+
+    :focus {
+      outline: 1px solid #000;
+    }
+
+    :focus,
+    :valid {
+      padding: 20px 20px 5px 20px;
+    }
+
+    :focus ~ .placeholder,
+    :valid ~ .placeholder {
+      transform: translateY(-9px);
+      font-size: 0.75rem;
+      opacity: 1;
+    }
   }
 
   span {
@@ -134,6 +163,19 @@ export const InputWrapper = styled.div`
     font-weight: 500;
     font-size: 0.875rem;
     color: #6d7175;
+  }
+
+  .placeholder {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #6d7175;
+
+    position: absolute;
+    top: 14px;
+    left: 21px;
+    pointer-events: none;
+    transition: 0.5s;
+    opacity: 0.9;
   }
 `
 
@@ -308,7 +350,7 @@ export const SectionDesktop = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-width: 41.666667%;
+  width: 32%;
 
   border-left: 1px solid #d9d9d9;
   padding: 30px;
@@ -333,7 +375,7 @@ export const SectionDesktop = styled.div`
     color: #000;
   }
 
-  .szh-accordion {
+  /* .szh-accordion {
     width: 100%;
     padding: 5px 0;
   }
@@ -351,7 +393,7 @@ export const SectionDesktop = styled.div`
       background-color: #fff;
       border: none;
     }
-  }
+  } */
 `
 
 export const Quantidade = styled.div`
@@ -363,6 +405,7 @@ export const Quantidade = styled.div`
   font-size: 0.75rem;
   font-weight: 600;
   text-align: center;
+  display: flex;
 
   input {
     width: 50%;
@@ -383,11 +426,14 @@ export const Quantidade = styled.div`
   }
 
   button {
+    width: 20px;
+    height: 20px;
     background-color: transparent;
     border: none;
     font-size: 0.75rem;
     font-weight: 600;
     text-align: center;
+    cursor: pointer;
   }
 
   @media screen and (min-width: 990px) {
@@ -549,6 +595,71 @@ export const ImageLoja = styled.div`
     @media screen and (max-width: 490px) {
       width: 185px;
       height: 61.663px;
+    }
+  }
+`
+
+export const Parcelas = styled.div`
+  width: 100%;
+  max-width: 530px;
+  min-height: 46.4px;
+  position: relative;
+  z-index: 1;
+  /* border: 1px solid red; */
+
+  .szh-accordion__item-heading {
+    padding: 0;
+
+    button {
+      width: 100%;
+      max-width: 530px;
+    }
+
+    h3 {
+      font-size: 0.875rem;
+      font-weight: 400;
+      color: #818181;
+      position: absolute;
+      padding: 6px 0 0 17px;
+    }
+
+    p {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #333333;
+      padding: 20px 0 0 17px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 0.875rem;
+      width: 100%;
+      min-height: 46.4px;
+    }
+  }
+
+  .szh-accordion__item-content {
+    width: 100%;
+    max-width: 530px;
+    height: 200px;
+    overflow: auto;
+    padding: 0;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 4px 20px rgb(0 0 0 / 12%);
+
+    position: absolute;
+    z-index: 3;
+
+    li {
+      font-size: 0.875rem;
+      font-weight: 500;
+      line-height: 20px;
+      color: #333333;
+      padding: 10px 20px;
+      cursor: pointer;
+
+      :hover {
+        background-color: #e8f2ff;
+      }
     }
   }
 `

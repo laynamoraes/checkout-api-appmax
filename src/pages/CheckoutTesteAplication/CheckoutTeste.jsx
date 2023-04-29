@@ -8,6 +8,7 @@ import ImageSecurity from "./assets/security.png"
 import ImageFeedback from "./assets/feedback-positive.png"
 import ImageReembolso from "./assets/reembolso.png"
 import ImageCards from "./assets/cards.png"
+import { productsData } from "./productsData"
 import "./styles"
 
 import { Accordion, AccordionItem } from "@szhsin/react-accordion"
@@ -63,7 +64,10 @@ import {
   HeaderAccordionRight,
   Beneficios,
   ImageLoja,
+  Parcelas,
+  ImageGarantiaCnt,
 } from "./styles"
+import { useParams } from "react-router-dom"
 
 function Formulario() {
   const acessToken = "8D479FDE-06804C4D-CE2E17D2-8180D7D1"
@@ -234,6 +238,127 @@ function Formulario() {
     }
   }
 
+  const { id } = useParams()
+  const produto = productsData.find((p) => p.id == id)
+
+  // Seleção de Pix e Cartão
+  const [selectedCard, setSelectedCard] = useState(true)
+  const [selectedPix, setSelectedPix] = useState(false)
+
+  const selectCardClick = () => {
+    setSelectedCard(true)
+    setSelectedPix(false)
+  }
+
+  const selectPixClick = () => {
+    setSelectedPix(true)
+    setSelectedCard(false)
+  }
+
+  // Parcelas
+  // estado que armazenda a quantidade parcelas 👇🏻
+  const [selectedKey, setSelectedKey] = useState("")
+
+  const [itemCount, setItemCount] = useState(1)
+
+  const options = [
+    {
+      key: 1,
+      value: `1x de R$ ${(itemCount * produto.preco)
+        .toString()
+        .replace(".", ",")}`,
+    },
+    {
+      key: 2,
+      value: `2x de R$ ${(parseFloat(produto.preco2x()) * itemCount)
+        .toFixed(2)
+        .toString()
+        .replace(".", ",")}*`,
+    },
+    {
+      key: 3,
+      value: `3x de R$ ${(parseFloat(produto.preco3x()) * itemCount)
+        .toFixed(2)
+        .toString()
+        .replace(".", ",")}*`,
+    },
+    {
+      key: 4,
+      value: `4x de R$ ${(parseFloat(produto.preco4x()) * itemCount)
+        .toFixed(2)
+        .toString()
+        .replace(".", ",")}*`,
+    },
+    {
+      key: 5,
+      value: `5x de R$ ${(parseFloat(produto.preco5x()) * itemCount)
+        .toFixed(2)
+        .toString()
+        .replace(".", ",")}*`,
+    },
+    {
+      key: 6,
+      value: `6x de R$ ${(parseFloat(produto.preco6x()) * itemCount)
+        .toFixed(2)
+        .toString()
+        .replace(".", ",")}*`,
+    },
+    {
+      key: 7,
+      value: `7x de R$ ${(parseFloat(produto.preco7x()) * itemCount)
+        .toFixed(2)
+        .toString()
+        .replace(".", ",")}*`,
+    },
+    {
+      key: 8,
+      value: `8x de R$ ${(parseFloat(produto.preco8x()) * itemCount)
+        .toFixed(2)
+        .toString()
+        .replace(".", ",")}*`,
+    },
+    {
+      key: 9,
+      value: `9x de R$ ${(parseFloat(produto.preco9x()) * itemCount)
+        .toFixed(2)
+        .toString()
+        .replace(".", ",")}*`,
+    },
+    {
+      key: 10,
+      value: `10x de R$ ${(parseFloat(produto.preco10x()) * itemCount)
+        .toFixed(2)
+        .toString()
+        .replace(".", ",")}*`,
+    },
+    {
+      key: 11,
+      value: `11x de R$ ${(parseFloat(produto.preco11x()) * itemCount)
+        .toFixed(2)
+        .toString()
+        .replace(".", ",")}*`,
+    },
+    {
+      key: 12,
+      value: `12x de R$ ${(parseFloat(produto.preco12x()) * itemCount)
+        .toFixed(2)
+        .toString()
+        .replace(".", ",")}*`,
+    },
+  ]
+
+  // variável a ser revisada!!!
+  const [selectedOption, setSelectedOption] = useState(options[11].value)
+  console.log(options[11].value)
+  console.log(selectedOption)
+
+  const handleOptionClick = (optionValue, optionKey) => {
+    setSelectedOption(optionValue)
+    setSelectedKey(optionKey)
+    console.log(optionValue)
+    console.log(optionKey)
+  }
+
   function handleSubmit() {
     formFirst()
   }
@@ -258,10 +383,12 @@ function Formulario() {
 
       <Content>
         <FormWrapper className="formulario" onSubmit={handleSubmit}>
-          <ImageGarantia
-            src="https://assets.mycartpanda.com/static/theme_images/d0/0d/07/290462_0670611796.png"
-            alt="Selo de Garantia"
-          />
+          <ImageGarantiaCnt>
+            <ImageGarantia
+              src="https://assets.mycartpanda.com/static/theme_images/d0/0d/07/290462_0670611796.png"
+              alt="Selo de Garantia"
+            />
+          </ImageGarantiaCnt>
 
           <SectionMobile>
             <Accordion>
@@ -289,12 +416,9 @@ function Formulario() {
                     borderTop: "1px solid #ccc",
                   }}
                 >
-                  <img
-                    src="https://thumbor.cartpanda.com/OiCUsJv_s3NQdbJmD-4oUX6yKTA=/64x0/https://assets.mycartpanda.com/static/products_images/2xO8vbpB6kJ6W4ieo2VvEJiyg4qYZl.jpg"
-                    alt="Imagem do Produto"
-                  />
+                  <img src={produto.imagem} alt="Imagem do Produto" />
                   <div style={{ padding: "0 15px", width: "100%" }}>
-                    BoneLink 7.1™ - COMPRE 1 LEVE 2
+                    {produto.nome}
                   </div>
                   <div
                     style={{
@@ -312,12 +436,32 @@ function Formulario() {
                         color: "#202223",
                       }}
                     >
-                      R$ 99,90
+                      R${" "}
+                      {(itemCount * produto.preco).toString().replace(".", ",")}
                     </p>
                     <Quantidade>
-                      <button>-</button>
-                      <input type="number" name="quantity" value={1} min={1} />
-                      <button>+</button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setItemCount(Math.max(itemCount - 1, 1))
+                        }}
+                      >
+                        -
+                      </button>
+                      <input
+                        type="number"
+                        name="quantity"
+                        value={itemCount}
+                        readOnly
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setItemCount(itemCount + 1)
+                        }}
+                      >
+                        +
+                      </button>
                     </Quantidade>
                   </div>
                 </div>
@@ -328,15 +472,46 @@ function Formulario() {
                   <div>
                     <p>Subtotal</p>
                     <p>Entrega</p>
-                    <p>Desconto cartão</p>
+
+                    {selectedPix && <p>Desconto PIX</p>}
+
                     <Total>Total</Total>
                   </div>
                   <div style={{ textAlign: "end" }}>
-                    <p>R$ 99,90</p>
+                    <p>
+                      R${" "}
+                      {(itemCount * produto.preco).toString().replace(".", ",")}
+                    </p>
                     <p>---</p>
-                    <p>- R$ 0,00</p>
-                    <Total>12x de R$ 10,03*</Total>
-                    <p style={{ fontSize: "0.625rem" }}>OU R$ 99,90 À VISTA</p>
+                    {selectedPix && (
+                      <p>
+                        - R${" "}
+                        {(parseFloat(produto.descontoPix()) * itemCount)
+                          .toFixed(2)
+                          .replace(".", ",")}
+                      </p>
+                    )}
+
+                    {selectedCard && <Total>{selectedOption}</Total>}
+
+                    {selectedPix && (
+                      <Total>
+                        R${" "}
+                        {(parseFloat(produto.precoPix()) * itemCount)
+                          .toFixed(2)
+                          .replace(".", ",")}
+                      </Total>
+                    )}
+
+                    {selectedCard && (
+                      <p style={{ fontSize: "0.625rem" }}>
+                        OU R${" "}
+                        {(itemCount * produto.preco)
+                          .toString()
+                          .replace(".", ",")}{" "}
+                        À VISTA
+                      </p>
+                    )}
                   </div>
                 </ResumoPedido>
               </AccordionItem>
@@ -351,8 +526,9 @@ function Formulario() {
               id="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              placeholder="E-mail*"
+              required
             />
+            <p className="placeholder">E-mail*</p>
           </InputWrapper>
           <InputWrapper>
             <InputMask
@@ -360,8 +536,9 @@ function Formulario() {
               id="nomeCompleto"
               value={nomeCompleto}
               onChange={(event) => setNomeCompleto(event.target.value)}
-              placeholder="Nome completo*"
+              required
             />
+            <p className="placeholder">Nome completo*</p>
           </InputWrapper>
 
           <DivFlex style={{ marginBottom: "36px" }}>
@@ -373,8 +550,9 @@ function Formulario() {
                 maskChar={null}
                 value={telefone}
                 onChange={(event) => setTelefone(event.target.value)}
-                placeholder="Celular*"
+                required
               />
+              <p className="placeholder">Celular*</p>
             </InputWrapper>
 
             <DivError>
@@ -388,8 +566,9 @@ function Formulario() {
                   value={cpf}
                   onBlur={validateCPF}
                   onChange={(event) => setCpf(event.target.value)}
-                  placeholder="CPF*"
+                  required
                 />
+                <p className="placeholder">CPF*</p>
               </InputWrapper>
               {errorCPF && <ErrorText>{errorCPF}</ErrorText>}
             </DivError>
@@ -408,10 +587,11 @@ function Formulario() {
                 maskChar={null}
                 id="cep"
                 className={errorCEP ? "error-border" : ""}
-                placeholder="CEP*"
                 value={cep}
                 onChange={handleCepChange}
+                required
               />
+              <p className="placeholder">CEP*</p>
               {showAddress && logradouro && bairro && cidade && estado && (
                 <span>
                   {cidade}/{estado}
@@ -429,19 +609,21 @@ function Formulario() {
                   <InputMask
                     type="text"
                     id="logradouro"
-                    placeholder="Endereço*"
                     value={logradouro}
                     onChange={(event) => setLogradouro(event.target.value)}
+                    required
                   />
+                  <p className="placeholder">Endereço*</p>
                 </InputWrapper>
 
                 <InputWrapper>
                   <InputMask
                     type="text"
                     id="numero"
-                    placeholder="Número*"
                     onChange={(event) => setNumero(event.target.value)}
+                    required
                   />
+                  <p className="placeholder">Número*</p>
                 </InputWrapper>
               </DivFlex>
 
@@ -453,17 +635,20 @@ function Formulario() {
                     placeholder="Bairro*"
                     value={bairro}
                     onChange={(event) => setBairro(event.target.value)}
+                    required
                   />
+                  <p className="placeholder">Bairro*</p>
                 </InputWrapper>
 
                 <InputWrapper>
                   <InputMask
                     type="text"
                     id="complemento"
-                    placeholder="Complemento"
                     value={complemento}
                     onChange={(event) => setComplemento(event.target.value)}
+                    required
                   />
+                  <p className="placeholder">Complemento</p>
                 </InputWrapper>
               </DivFlex>
             </div>
@@ -495,6 +680,7 @@ function Formulario() {
                   </HeaderAccordion>
                 }
                 initialEntered
+                onClick={selectCardClick}
               >
                 <DivError>
                   <DivFlex>
@@ -542,7 +728,7 @@ function Formulario() {
                         style={{ position: "absolute", margin: "26px 17px" }}
                       />
                       <InputMask
-                        style={{ paddingLeft: "45px" }}
+                        style={{ padding: "14px 20px 14px 45px" }}
                         mask="99/99"
                         maskChar={null}
                         id="validityCard"
@@ -562,7 +748,7 @@ function Formulario() {
                         style={{ position: "absolute", margin: "26px 17px" }}
                       />
                       <InputMask
-                        style={{ paddingLeft: "45px" }}
+                        style={{ padding: "14px 20px 14px 45px" }}
                         mask="9999"
                         maskChar={null}
                         id="codeCard"
@@ -573,7 +759,35 @@ function Formulario() {
                     </DivFlex>
                   </InputWrapper>
                 </DivFlexNoWrap>
-                <InputMask id="payCard" placeholder="Parcelas" />
+                <Accordion>
+                  <Parcelas>
+                    <AccordionItem
+                      header={
+                        <>
+                          <h3>Parcelas</h3>
+                          <p>{selectedOption}</p>
+                        </>
+                      }
+                    >
+                      <ul id="card-payment">
+                        {options.map((option) => (
+                          <li
+                            key={option.key}
+                            onClick={() =>
+                              handleOptionClick(option.value, option.key)
+                            }
+                            className={
+                              selectedOption === option.key ? "selected" : ""
+                            }
+                          >
+                            {option.value}
+                          </li>
+                        ))}
+                      </ul>
+                      <input type="hidden" id="selected" value={selectedKey} />
+                    </AccordionItem>
+                  </Parcelas>
+                </Accordion>
                 <ButtonCnt>
                   <Button onClick={formFirst}>
                     <FiLock />
@@ -618,6 +832,7 @@ function Formulario() {
                       </HeaderAccordionRight>
                     </HeaderAccordion>
                   }
+                  onClick={selectPixClick}
                 >
                   <Text style={{ color: "#000", marginBottom: "20px" }}>
                     Clique em "Finalizar Compra" para gerar o PIX.
@@ -634,7 +849,11 @@ function Formulario() {
                           marginBottom: "5px",
                         }}
                       >
-                        Valor à vista <strong>R$ 87,91</strong>;
+                        Valor à vista{" "}
+                        <strong>
+                          R$ {produto.precoPix().replace(".", ",")}
+                        </strong>
+                        ;
                       </Text>
                     </li>
                     <li>
@@ -793,12 +1012,9 @@ function Formulario() {
               padding: "15px",
             }}
           >
-            <img
-              src="https://thumbor.cartpanda.com/OiCUsJv_s3NQdbJmD-4oUX6yKTA=/64x0/https://assets.mycartpanda.com/static/products_images/2xO8vbpB6kJ6W4ieo2VvEJiyg4qYZl.jpg"
-              alt="Imagem do Produto"
-            />
+            <img src={produto.imagem} alt="Imagem do Produto" />
             <div style={{ padding: "0 15px", width: "100%" }}>
-              BoneLink 7.1™ - COMPRE 1 LEVE 2
+              {produto.nome}
               <p
                 style={{
                   fontSize: "1rem",
@@ -808,7 +1024,7 @@ function Formulario() {
                   marginTop: "3px",
                 }}
               >
-                R$ 99,90
+                R$ {produto.preco.toString().replace(".", ",")}
               </p>
             </div>
             <div
@@ -820,7 +1036,15 @@ function Formulario() {
               }}
             >
               <Quantidade style={{ fontWeight: "600" }}>
-                - &nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp; +
+                <button>-</button>
+                <input
+                  type="number"
+                  name="quantity"
+                  value={1}
+                  min={1}
+                  readOnly
+                />
+                <button>+</button>
               </Quantidade>
             </div>
           </div>
@@ -831,15 +1055,27 @@ function Formulario() {
             <div>
               <p>Subtotal</p>
               <p>Entrega</p>
-              <p>Desconto cartão</p>
+
+              {selectedPix && <p>Desconto Pix</p>}
+
               <Total>Total</Total>
             </div>
             <div style={{ textAlign: "end" }}>
-              <p>R$ 99,90</p>
+              <p>R$ {produto.preco.toString().replace(".", ",")}</p>
               <p>---</p>
-              <p>- R$ 0,00</p>
-              <Total>12x de R$ 10,03*</Total>
-              <p style={{ fontSize: "0.625rem" }}>OU R$ 99,90 À VISTA</p>
+
+              {selectedPix && (
+                <p>- R$ {produto.descontoPix().replace(".", ",")}</p>
+              )}
+
+              {selectedCard && <Total>{selectedOption}</Total>}
+
+              {selectedPix && (
+                <Total>R$ {produto.precoPix().replace(".", ",")}</Total>
+              )}
+              <p style={{ fontSize: "0.625rem" }}>
+                OU R$ {produto.preco.toString().replace(".", ",")} À VISTA
+              </p>
             </div>
           </ResumoPedido>
         </SectionDesktop>
