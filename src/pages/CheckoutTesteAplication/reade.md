@@ -1,5 +1,8 @@
 - Implementar lógica para renderizar ícones das bandeiras de cartão de crédito;
-- Implementar campos obrigatórios do formulário, para não permitir que o cliente o envie com dados faltando.
+- Implementar campos obrigatórios do formulário, para não permitir que o cliente o envie com dados faltando;
+
+- Implementar API;
+
   ✅ Implementar botão de quantidade;
   ✅ Implementar módulo de PARCELAS;
   ✅ Implementar lógica para os valores dos produtos;

@@ -4,8 +4,8 @@ class Cronometro extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      minutos: 10,
-      segundos: 8,
+      minutos: props.minutos,
+      segundos: props.segundos,
       start: false,
     }
     this.timer = null

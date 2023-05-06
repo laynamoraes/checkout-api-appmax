@@ -14,17 +14,17 @@ import { Container } from "./styles"
 function Checkout() {
   const Db = FrameDefault
 
-  const accessToken = "728776C4-7332E832-A81AE536-24CB2461"
+  const accessToken = "8D479FDE-06804C4D-CE2E17D2-8180D7D1"
 
   function handleSubmit() {
     const postCustomer = {
       "access-token": accessToken,
       firstname: "Teste",
       lastname: "Teste",
-      email: "testecheckout02@teste.com",
-      telephone: "(12) 98104-1282",
+      email: "testecheckout05@teste.com",
+      telephone: "(66) 98104-1282",
       postcode: "65039-123",
-      address_street: "Rua Av Vicente",
+      address_street: "Rua Av José",
       address_street_number: "1343",
       address_street_complement: "Bloco 112",
       address_street_district: "Centro",
@@ -52,12 +52,16 @@ function Checkout() {
     }
 
     axios
-      .post("https://admin.appmax.com.br/api/v3/customer", postCustomer, {
-        headers,
-      })
+      .post(
+        "https://homolog.sandboxappmax.com.br/api/v3/customer",
+        postCustomer,
+        {
+          headers,
+        }
+      )
       .then((response) => {
         console.log(response.data, "CLIENTE ✅")
-        // const orderId = response.data.order_id;
+
         const postOrder = {
           "access-token": accessToken,
           total: 10.0,
@@ -80,9 +84,13 @@ function Checkout() {
           freight_type: "PAC",
         }
         axios
-          .post("https://admin.appmax.com.br/api/v3/order", postOrder, {
-            headers,
-          })
+          .post(
+            "https://homolog.sandboxappmax.com.br/api/v3/order",
+            postOrder,
+            {
+              headers,
+            }
+          )
           .then((response) => {
             console.log(response.data, "ORDEM ✅")
 
@@ -95,21 +103,24 @@ function Checkout() {
                 customer_id: response.data.data.customer_id,
               },
               payment: {
-                CreditCard: {
-                  number: "",
-                  cvv: "",
-                  month: 4,
-                  year: 28,
-                  document_number: "",
-                  name: "teste teste",
-                  installments: 12,
-                  soft_descriptor: "MYSTORE",
+                // CreditCard: {
+                //   number: "",
+                //   cvv: "",
+                //   month: 4,
+                //   year: 28,
+                //   document_number: "",
+                //   name: "teste teste",
+                //   installments: 12,
+                //   soft_descriptor: "MYSTORE",
+                // },
+                Boleto: {
+                  document_number: "191.000.000-00",
                 },
               },
             }
             axios
               .post(
-                `https://admin.appmax.com.br/api/v3/payment/credit-card`,
+                `https://homolog.sandboxappmax.com.br/api/v3/payment/boleto`,
                 paymentForm,
                 { headers }
               )

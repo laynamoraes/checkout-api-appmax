@@ -3,15 +3,23 @@ import InputMask from "react-input-mask"
 import axios from "axios"
 import * as cardValidator from "card-validator"
 import CPF from "cpf-check"
-import Cronometro from "./Cronometro"
+import Cronometro from "./CronometroCheckout"
 import ImageSecurity from "./assets/security.png"
 import ImageFeedback from "./assets/feedback-positive.png"
 import ImageReembolso from "./assets/reembolso.png"
 import ImageCards from "./assets/cards.png"
 import { productsData } from "./productsData"
+import { useNavigate } from "react-router-dom"
+import { addMinutes, format, parse } from "date-fns"
+import Loading from "./Loading/loading"
 import "./styles"
 
-import { Accordion, AccordionItem } from "@szhsin/react-accordion"
+import {
+  Accordion,
+  AccordionItem,
+  ControlledAccordion,
+  useAccordionProvider,
+} from "@szhsin/react-accordion"
 
 import {
   BsShieldLockFill,
@@ -21,6 +29,7 @@ import {
 } from "react-icons/bs"
 
 import { FiLock } from "react-icons/fi"
+import { AiFillAlert } from "react-icons/ai"
 import { IoIosArrowUp } from "react-icons/io"
 import { MdSecurity } from "react-icons/md"
 import {
@@ -66,11 +75,18 @@ import {
   ImageLoja,
   Parcelas,
   ImageGarantiaCnt,
+  PagamentoNegado,
+  Wrapper,
 } from "./styles"
 import { useParams } from "react-router-dom"
+import PayPix from "../PayPix/Checkout"
 
 function Formulario() {
-  const acessToken = "8D479FDE-06804C4D-CE2E17D2-8180D7D1"
+  // Token de produção
+  const accessToken = "A34B7F16-EC737AA7-F5C01F9C-8AA6C0A5"
+
+  // Token de teste
+  // const accessToken = "8D479FDE-06804C4D-CE2E17D2-8180D7D1"
   const [nomeCompleto, setNomeCompleto] = useState("")
   const [email, setEmail] = useState("")
   const [telefone, setTelefone] = useState("")
@@ -93,9 +109,12 @@ function Formulario() {
   const [errorCEP, setErrorCEP] = useState("")
   const [errorCard, setErrorCard] = useState("")
   const [errorCPF, setErrorCPF] = useState("")
+  const [errorPagamento, setErrorPagamento] = useState("")
 
+  const [showLoading, setShowLoading] = useState(false)
   const [ipAddress, setIpAddress] = useState("")
 
+  // Capturar Ip Cliente
   useEffect(() => {
     async function fetchIpAddress() {
       const response = await axios.get("https://api.ipify.org?format=json")
@@ -111,7 +130,7 @@ function Formulario() {
 
     const [firstName, ...lastName] = nomeCompleto.split(" ")
     const postCostumer = {
-      "acess-token": acessToken,
+      "acess-token": accessToken,
       firstname: firstName,
       lastname: lastName.join(" "),
       email: email,
@@ -142,7 +161,7 @@ function Formulario() {
 
     const [monthCard, yearCard] = validityCard.split("/")
     const postCreditCard = {
-      "access-token": acessToken,
+      "access-token": accessToken,
       cart: {
         order_id: 345678,
       },
@@ -241,6 +260,14 @@ function Formulario() {
   const { id } = useParams()
   const produto = productsData.find((p) => p.id == id)
 
+  // configuração do Accordion de parcelamento
+  const providerValue = useAccordionProvider({
+    transition: true,
+    transitionTimeout: 150,
+  })
+
+  const { toggle } = providerValue
+
   // Seleção de Pix e Cartão
   const [selectedCard, setSelectedCard] = useState(true)
   const [selectedPix, setSelectedPix] = useState(false)
@@ -257,11 +284,18 @@ function Formulario() {
 
   // Parcelas
   // estado que armazenda a quantidade parcelas 👇🏻
-  const [selectedKey, setSelectedKey] = useState("")
+  const [selectedKey, setSelectedKey] = useState(12)
 
   const [itemCount, setItemCount] = useState(1)
 
-  const options = [
+  const handleSetItemCount = (total) => {
+    setItemCount(total)
+    setSelectedOption(
+      options(total).find((item) => item.key === selectedKey).value
+    )
+  }
+
+  const options = (itemCount) => [
     {
       key: 1,
       value: `1x de R$ ${(itemCount * produto.preco)
@@ -347,25 +381,270 @@ function Formulario() {
     },
   ]
 
-  // variável a ser revisada!!!
-  const [selectedOption, setSelectedOption] = useState(options[11].value)
-  console.log(options[11].value)
-  console.log(selectedOption)
+  const [selectedOption, setSelectedOption] = useState(
+    options(itemCount)[11].value
+  )
 
   const handleOptionClick = (optionValue, optionKey) => {
     setSelectedOption(optionValue)
     setSelectedKey(optionKey)
+    toggle("item-4")
     console.log(optionValue)
     console.log(optionKey)
   }
 
-  function handleSubmit() {
-    formFirst()
+  function handleSubmitCredit() {
+    const [firstName, ...lastName] = nomeCompleto.split(" ")
+    const [monthCard, yearCard] = validityCard.split("/")
+
+    const monthCardNumber = parseInt(monthCard)
+    const yearCardNumber = parseInt(yearCard)
+
+    const postCustomer = {
+      "access-token": accessToken,
+      firstname: firstName,
+      lastname: lastName.join(" "),
+      document_number: cpf,
+      email: email,
+      telephone: telefone,
+      postcode: cep,
+      address_street: logradouro,
+      address_street_number: numero,
+      address_street_complement: complemento,
+      address_street_district: bairro,
+      address_city: cidade,
+      address_state: estado,
+      ip: ipAddress,
+      custom_txt: "Tênis de Corrida 39",
+      products: [
+        {
+          product_sku: "123456",
+          product_qty: 1,
+        },
+      ],
+      tracking: {
+        utm_source: "google",
+        utm_campaign: "black-friday",
+        utm_medium: "cpc",
+        utm_content: "tenis-corrida",
+        utm_term: "logo-link",
+      },
+    }
+
+    const headers = {
+      "access-token": accessToken,
+    }
+
+    axios
+      .post("https://admin.appmax.com.br/api/v3/customer", postCustomer, {
+        headers,
+      })
+      .then((response) => {
+        console.log(response.data, "CLIENTE ✅")
+        setShowLoading(true)
+
+        const postOrder = {
+          "access-token": accessToken,
+          total: 11.0,
+          products: [
+            {
+              sku: "123456",
+              name: "My product 1",
+              qty: 1,
+            },
+          ],
+          shipping: 0.0,
+          customer_id: response.data.data.id,
+          discount: 0,
+          freight_type: "PAC",
+        }
+        axios
+          .post("https://admin.appmax.com.br/api/v3/order", postOrder, {
+            headers,
+          })
+          .then((response) => {
+            console.log(response.data, "ORDEM ✅")
+
+            const orderId = response.data.data.id
+
+            const paymentForm = {
+              "access-token": accessToken,
+              cart: {
+                order_id: response.data.data.id,
+              },
+              customer: {
+                customer_id: response.data.data.customer_id,
+              },
+              payment: {
+                CreditCard: {
+                  number: numberCard.replace(/\s+/g, ""),
+                  cvv: cvvCard,
+                  month: monthCardNumber,
+                  year: yearCardNumber,
+                  document_number: cpf,
+                  name: nameCard,
+                  installments: selectedKey,
+                  soft_descriptor: "MYSTORE",
+                },
+              },
+            }
+            axios
+              .post(
+                `https://admin.appmax.com.br/api/v3/payment/credit-card`,
+                paymentForm,
+                { headers }
+              )
+              .then((response) => {
+                console.log(response.data, "DEU CERTO O PAGAMENTO ✅")
+                navigate("/payment-credit-card", {
+                  state: {
+                    orderId,
+                  },
+                })
+              })
+              .catch((error) => {
+                console.error(error, "DEU ERRADO")
+                setErrorPagamento("Pagamento negado")
+                setShowLoading(false)
+              })
+          })
+          .catch((error) => {
+            console.error(error)
+          })
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }
+
+  const navigate = useNavigate()
+  const [dataFromApi, setDataFromApi] = useState(null)
+
+  function handleSubmitPix() {
+    const [firstName, ...lastName] = nomeCompleto.split(" ")
+
+    // manipulação para data de expiração do PIX
+    const dataAtual = new Date().toLocaleString()
+    const dataAtualFormat = parse(dataAtual, "dd/MM/yyyy, HH:mm:ss", new Date())
+    const dataExpiracao = addMinutes(dataAtualFormat, 30)
+    const dataExpiracaoJSON = format(dataExpiracao, "yyyy-MM-dd HH:mm:ss")
+
+    const postCustomer = {
+      "access-token": accessToken,
+      firstname: firstName,
+      lastname: lastName.join(" "),
+      document_number: cpf,
+      email: email,
+      telephone: telefone,
+      postcode: cep,
+      address_street: logradouro,
+      address_street_number: numero,
+      address_street_complement: complemento,
+      address_street_district: bairro,
+      address_city: cidade,
+      address_state: estado,
+      ip: ipAddress,
+      custom_txt: "Tênis de Corrida 39",
+      products: [
+        {
+          product_sku: "123456",
+          product_qty: 2,
+        },
+      ],
+    }
+
+    const headers = {
+      "access-token": accessToken,
+    }
+
+    axios
+      .post("https://admin.appmax.com.br/api/v3/customer", postCustomer, {
+        headers,
+      })
+      .then((response) => {
+        console.log(response.data, "CLIENTE ✅")
+        setShowLoading(true)
+
+        const postOrder = {
+          "access-token": accessToken,
+          total: 10.0,
+          products: [
+            {
+              sku: "123456",
+              name: "My product 1",
+              qty: 2,
+            },
+          ],
+          shipping: 0.0,
+          customer_id: response.data.data.id,
+          discount: 0,
+          freight_type: "PAC",
+        }
+        axios
+          .post("https://admin.appmax.com.br/api/v3/order", postOrder, {
+            headers,
+          })
+          .then((response) => {
+            console.log(response.data, "ORDEM ✅")
+
+            const orderId = response.data.data.id
+
+            const paymentForm = {
+              "access-token": accessToken,
+              cart: {
+                order_id: response.data.data.id,
+              },
+              customer: {
+                customer_id: response.data.data.customer_id,
+              },
+              payment: {
+                pix: {
+                  document_number: cpf,
+                  expiration_date: dataExpiracaoJSON,
+                },
+              },
+            }
+            axios
+              .post(
+                `https://admin.appmax.com.br/api/v3/payment/pix`,
+                paymentForm,
+                { headers }
+              )
+              .then((response) => {
+                console.log(response.data, "DEU CERTO O PAGAMENTO ✅")
+                setDataFromApi(response.data)
+                navigate("/payment-pix", {
+                  state: {
+                    dataFromApi: response.data,
+                    orderId,
+                  },
+                })
+              })
+              .catch((error) => {
+                console.error(error, "DEU ERRADO")
+                setShowLoading(false)
+              })
+          })
+          .catch((error) => {
+            console.error(error)
+          })
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }
+
+  // function handleSubmit() {
+  //   handleSubmitCredit()
+  //   handleSubmitPix()
+  // }
 
   return (
     <Container>
       <GlobalStyle />
+
+      {showLoading && <Loading />}
+
       <HeaderPromotion>
         <DivFlexHeader style={{ marginBottom: "8px" }}>
           <BsShieldLockFill fill="#50A756" style={{ marginRight: "5px" }} />
@@ -376,13 +655,13 @@ function Formulario() {
             Promoção especial encerra em:
           </HeaderText>
           <CronometroStyle>
-            <Cronometro />
+            <Cronometro minutos="10" segundos="8" />
           </CronometroStyle>
         </DivFlexHeader>
       </HeaderPromotion>
 
       <Content>
-        <FormWrapper className="formulario" onSubmit={handleSubmit}>
+        <FormWrapper className="formulario">
           <ImageGarantiaCnt>
             <ImageGarantia
               src="https://assets.mycartpanda.com/static/theme_images/d0/0d/07/290462_0670611796.png"
@@ -443,7 +722,7 @@ function Formulario() {
                       <button
                         type="button"
                         onClick={() => {
-                          setItemCount(Math.max(itemCount - 1, 1))
+                          handleSetItemCount(Math.max(itemCount - 1, 1))
                         }}
                       >
                         -
@@ -457,7 +736,7 @@ function Formulario() {
                       <button
                         type="button"
                         onClick={() => {
-                          setItemCount(itemCount + 1)
+                          handleSetItemCount(itemCount + 1)
                         }}
                       >
                         +
@@ -646,7 +925,6 @@ function Formulario() {
                     id="complemento"
                     value={complemento}
                     onChange={(event) => setComplemento(event.target.value)}
-                    required
                   />
                   <p className="placeholder">Complemento</p>
                 </InputWrapper>
@@ -658,6 +936,28 @@ function Formulario() {
             Método de Pagamento
           </TitleSection>
           <Text>Escolha o seu método de pagamento abaixo</Text>
+
+          {errorPagamento && (
+            <Wrapper>
+              <PagamentoNegado>
+                <div
+                  style={{ display: "flex", gap: "5px", marginBottom: "8px" }}
+                >
+                  <div
+                    style={{ width: "100%", maxWidth: "22px", height: "22px" }}
+                  >
+                    <AiFillAlert fill="#721C24" size="100%" />
+                  </div>
+                  <TitleSection>{errorPagamento}</TitleSection>
+                </div>
+                <Text style={{ color: "#202223" }}>
+                  Transação não autorizada. Revise os dados do seu cartão e
+                  tente outra vez. Se persistir, tente outro cartão ou outra
+                  forma de pagamento.
+                </Text>
+              </PagamentoNegado>
+            </Wrapper>
+          )}
 
           <AccordionWrapper className="formPay">
             <Accordion>
@@ -761,35 +1061,42 @@ function Formulario() {
                 </DivFlexNoWrap>
                 <Accordion>
                   <Parcelas>
-                    <AccordionItem
-                      header={
-                        <>
-                          <h3>Parcelas</h3>
-                          <p>{selectedOption}</p>
-                        </>
-                      }
-                    >
-                      <ul id="card-payment">
-                        {options.map((option) => (
-                          <li
-                            key={option.key}
-                            onClick={() =>
-                              handleOptionClick(option.value, option.key)
-                            }
-                            className={
-                              selectedOption === option.key ? "selected" : ""
-                            }
-                          >
-                            {option.value}
-                          </li>
-                        ))}
-                      </ul>
-                      <input type="hidden" id="selected" value={selectedKey} />
-                    </AccordionItem>
+                    <ControlledAccordion providerValue={providerValue}>
+                      <AccordionItem
+                        header={
+                          <>
+                            <h3>Parcelas</h3>
+                            <p>{selectedOption}</p>
+                          </>
+                        }
+                        itemKey="item-4"
+                      >
+                        <ul id="card-payment">
+                          {options(itemCount).map((option) => (
+                            <li
+                              key={option.key}
+                              onClick={() =>
+                                handleOptionClick(option.value, option.key)
+                              }
+                              className={
+                                selectedOption === option.key ? "selected" : ""
+                              }
+                            >
+                              {option.value}
+                            </li>
+                          ))}
+                        </ul>
+                        <input
+                          type="hidden"
+                          id="selected"
+                          value={selectedKey}
+                        />
+                      </AccordionItem>
+                    </ControlledAccordion>
                   </Parcelas>
                 </Accordion>
                 <ButtonCnt>
-                  <Button onClick={formFirst}>
+                  <Button type="button" onClick={handleSubmitCredit}>
                     <FiLock />
                     FINALIZAR COMPRA
                   </Button>
@@ -881,7 +1188,7 @@ function Formulario() {
                     </li>
                   </ul>
                   <ButtonCnt>
-                    <Button onClick={formFirst}>
+                    <Button type="button" onClick={handleSubmitPix}>
                       <FiLock />
                       FINALIZAR COMPRA
                     </Button>
@@ -1024,7 +1331,7 @@ function Formulario() {
                   marginTop: "3px",
                 }}
               >
-                R$ {produto.preco.toString().replace(".", ",")}
+                R$ {(itemCount * produto.preco).toString().replace(".", ",")}
               </p>
             </div>
             <div
@@ -1036,15 +1343,28 @@ function Formulario() {
               }}
             >
               <Quantidade style={{ fontWeight: "600" }}>
-                <button>-</button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    handleSetItemCount(Math.max(itemCount - 1, 1))
+                  }}
+                >
+                  -
+                </button>
                 <input
                   type="number"
                   name="quantity"
-                  value={1}
-                  min={1}
+                  value={itemCount}
                   readOnly
                 />
-                <button>+</button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    handleSetItemCount(itemCount + 1)
+                  }}
+                >
+                  +
+                </button>
               </Quantidade>
             </div>
           </div>
@@ -1061,7 +1381,9 @@ function Formulario() {
               <Total>Total</Total>
             </div>
             <div style={{ textAlign: "end" }}>
-              <p>R$ {produto.preco.toString().replace(".", ",")}</p>
+              <p>
+                R$ {(itemCount * produto.preco).toString().replace(".", ",")}
+              </p>
               <p>---</p>
 
               {selectedPix && (

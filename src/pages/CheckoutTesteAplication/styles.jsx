@@ -14,6 +14,8 @@ export const Container = styled.div`
   width: 100%;
   height: 100vh;
   background-color: #fff;
+
+  position: relative;
 `
 
 export const HeaderPromotion = styled.div`
@@ -374,26 +376,6 @@ export const SectionDesktop = styled.div`
     letter-spacing: 0.4px;
     color: #000;
   }
-
-  /* .szh-accordion {
-    width: 100%;
-    padding: 5px 0;
-  }
-
-  .szh-accordion__item-heading {
-    width: 100%;
-    max-width: 530px;
-    padding: 15px;
-
-    button {
-      font-size: 0.875rem;
-      font-weight: 500;
-      text-align: left;
-      color: #202223;
-      background-color: #fff;
-      border: none;
-    }
-  } */
 `
 
 export const Quantidade = styled.div`
@@ -662,4 +644,20 @@ export const Parcelas = styled.div`
       }
     }
   }
+`
+
+export const PagamentoNegado = styled.div`
+  width: 100%;
+  max-width: 450px;
+  margin: 20px 0 30px 0;
+  padding: 15px;
+  border: 1px solid #ffbcc2;
+  border-radius: 5px;
+  background-color: #f8d7da;
+`
+
+export const Wrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
 `

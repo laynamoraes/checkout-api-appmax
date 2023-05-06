@@ -13,6 +13,8 @@ import Home from "./pages/Home/Home"
 // import DuvidaseRastreio from "./pages/DuvidaseRastreio/DuvidaseRastreio"
 import Checkout from "./pages/Checkout/Checkout"
 import CheckoutTeste from "./pages/CheckoutTesteAplication/CheckoutTeste"
+import PayPix from "./pages/PayPix/Checkout"
+import PayCreditCard from "./pages/CheckoutTesteAplication/PayCreditCard/Checkout"
 // import AddressForm from "./pages/CheckoutTesteAplication/baseCedLayna"
 
 const router = createBrowserRouter([
@@ -31,6 +33,14 @@ const router = createBrowserRouter([
   {
     path: "porta-sapatos",
     element: <PortaSapatos />,
+  },
+  {
+    path: "payment-pix",
+    element: <PayPix />,
+  },
+  {
+    path: "payment-credit-card",
+    element: <PayCreditCard />,
   },
 ])
 
