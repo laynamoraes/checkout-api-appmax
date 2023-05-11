@@ -1,10 +1,10 @@
 import React, { useState, useRef } from "react"
-import { GlobalStyle } from "../../styles/global"
 import { BsCheckCircle, BsPhone } from "react-icons/bs"
 import { AiOutlineScan } from "react-icons/ai"
 import { useLocation } from "react-router-dom"
 import { addMinutes, parse } from "date-fns"
 import {
+  GlobalStyle,
   ButtonCopy,
   Container,
   CronometroStyle,
@@ -20,11 +20,11 @@ import {
   Title,
   WrapperInformations,
 } from "./styles"
-import CronometroPix from "../CheckoutTesteAplication/CronometroPix"
+import CronometroPix from "./CronometroPix"
 
 function PayPix() {
   const location = useLocation()
-  const {dataFromApi, orderId} = location.state
+  const { dataFromApi, orderId } = location.state
   const [codePix, setCodePix] = useState(dataFromApi.data.pix_emv)
   const inputRef = useRef(null)
 
@@ -117,7 +117,7 @@ function PayPix() {
                 display: "flex",
                 alignItems: "flex-start",
                 gap: "5px",
-                marginTop: "20px"
+                marginTop: "20px",
               }}
             >
               <DivIcon>
@@ -154,11 +154,18 @@ function PayPix() {
         </DivQrcode>
       </WrapperInformations>
 
-      <ImageLoja
-      style={{marginTop: "20px"}}
-        src="https://assets.mycartpanda.com/static/theme_images/d0/0d/07/290462_2797921766.png"
-        alt="Logomarca da loja"
-      />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <ImageLoja
+          style={{ marginTop: "20px" }}
+          src="https://assets.mycartpanda.com/static/theme_images/d0/0d/07/290462_2797921766.png"
+          alt="Logomarca da loja"
+        />
+      </div>
     </Container>
   )
 }

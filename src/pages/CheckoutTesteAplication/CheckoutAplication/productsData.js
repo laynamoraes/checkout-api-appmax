@@ -4,7 +4,7 @@ export const productsData = [
     nome: "Porta Sapatos Moderno de Vidro + Brinde Exclusivo",
     imagem:
       "https://cdn.shopify.com/s/files/1/0738/4249/1684/products/a_720x720_crop_center.jpg?v=1680015255",
-    preco: 157.91,
+    preco: 10.0,
     descontoPix: function () {
       return (this.preco * 0.12).toFixed(2)
     },
@@ -50,7 +50,7 @@ export const productsData = [
     nome: "Secador de Cabelo",
     imagem:
       "https://cdn.shopify.com/s/files/1/0738/4249/1684/products/a_720x720_crop_center.jpg?v=1680015255",
-    preco: 249.99,
+    preco: 10.0,
     descontoPix: function () {
       return (this.preco * 0.12).toFixed(2)
     },

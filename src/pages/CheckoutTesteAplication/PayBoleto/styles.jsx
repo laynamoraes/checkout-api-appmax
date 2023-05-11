@@ -1,4 +1,14 @@
-import styled from "styled-components"
+import styled, { createGlobalStyle } from "styled-components"
+
+export const GlobalStyle = createGlobalStyle`
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    font-family: 'Montserrat', sans-serif;
+  }
+`
 
 export const Container = styled.div`
   width: 100%;
@@ -58,14 +68,17 @@ export const ImageLoja = styled.img`
   }
 `
 
-export const DivCronometro = styled.div`
+export const DivValidade = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 5px;
-  padding: 15px 0 25px 0;
+  justify-content: space-around;
+  align-items: center;
+  padding: 25px 0;
   border-bottom: 1px solid #f1f1f1;
+
+  @media screen and (max-width: 490px) {
+    flex-direction: column;
+  }
 `
 
 export const CronometroStyle = styled.div`
@@ -139,31 +152,83 @@ export const DivCode = styled.div`
   margin-top: 20px;
 `
 
+export const ButtonContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 10px;
+  padding: 25px 0;
+
+  @media screen and (max-width: 490px) {
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px 0;
+  }
+`
+
 export const ButtonCopy = styled.button`
   width: 100%;
-  max-width: 300px;
-  height: 50px;
-  margin: 10px 0 50px 0;
-  border: none;
+  max-width: 250px;
+  height: 40px;
+  border: 1px solid #40b76a;
   border-radius: 30px;
   cursor: pointer;
   background-color: #40b76a;
   color: #fff;
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 500;
   transition: all 0.4s ease-in-out;
 
-  box-shadow: 0 2px 5px 1px rgba(64, 60, 67, 0.16);
-  -webkit-box-shadow: 0 2px 5px 1px rgba(64, 60, 67, 0.16);
-  -moz-box-shadow: 0 2px 5px 1px rgba(64, 60, 67, 0.16);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
 
   :hover {
-    opacity: 0.8;
+    opacity: 0.7;
   }
 
   @media screen and (max-width: 490px) {
-    width: 250px;
+    max-width: 200px;
     font-size: 0.875rem;
   }
 `
 
+export const BoletoPdf = styled.a`
+  width: 100%;
+  max-width: 250px;
+  text-decoration: none;
+
+  @media screen and (max-width: 490px) {
+    max-width: 200px;
+  }
+`
+
+export const ButtonDownload = styled.button`
+  width: 100%;
+  max-width: 250px;
+  height: 40px;
+  border: 1px solid #40b76a;
+  border-radius: 30px;
+  cursor: pointer;
+  background-color: #fff;
+  color: #40b76a;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.4s ease-in-out;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+
+  :hover {
+    opacity: 0.7;
+  }
+
+  @media screen and (max-width: 490px) {
+    max-width: 200px;
+    font-size: 0.875rem;
+  }
+`

@@ -4,18 +4,12 @@ import ReactDOM from "react-dom/client"
 // 1 - configurando router
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 
-// import SofaCamaDobravel from "./pages/sofa-cama-dobravel/SofaCama"
-// import DispensaPortatil from "./pages/dispensa-portatil/DispensaPortatil"
-// import PistolaVap from "./pages/pistola-alta-pressao/PistolaVap"
-// import ConjuntoToalhas from "./pages/conjunto-toalhas/ConjuntoToalhas"
 import PortaSapatos from "./pages/porta-sapatos/PortaSpatos"
 import Home from "./pages/Home/Home"
-// import DuvidaseRastreio from "./pages/DuvidaseRastreio/DuvidaseRastreio"
-import Checkout from "./pages/Checkout/Checkout"
-import CheckoutTeste from "./pages/CheckoutTesteAplication/CheckoutTeste"
-import PayPix from "./pages/PayPix/Checkout"
-import PayCreditCard from "./pages/CheckoutTesteAplication/PayCreditCard/Checkout"
-// import AddressForm from "./pages/CheckoutTesteAplication/baseCedLayna"
+import Checkout from "./pages/CheckoutTesteAplication/CheckoutAplication/Checkout"
+import PayPix from "./pages/CheckoutTesteAplication/PayPix/PayPix"
+import PayCreditCard from "./pages/CheckoutTesteAplication/PayCreditCard/PayCreditCard"
+import PayBoleto from "./pages/CheckoutTesteAplication/PayBoleto/PayBoleto"
 
 const router = createBrowserRouter([
   {
@@ -23,12 +17,8 @@ const router = createBrowserRouter([
     element: <Home />,
   },
   {
-    path: "checkout-payment",
-    element: <Checkout />,
-  },
-  {
     path: "checkout-teste/:id",
-    element: <CheckoutTeste />,
+    element: <Checkout />,
   },
   {
     path: "porta-sapatos",
@@ -41,6 +31,10 @@ const router = createBrowserRouter([
   {
     path: "payment-credit-card",
     element: <PayCreditCard />,
+  },
+  {
+    path: "payment-boleto",
+    element: <PayBoleto />,
   },
 ])
 

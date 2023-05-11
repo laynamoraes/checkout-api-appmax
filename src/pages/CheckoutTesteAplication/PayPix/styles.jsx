@@ -26,34 +26,6 @@ export const Container = styled.div`
   }
 `
 
-export const Content = styled.div`
-  width: 100%;
-  display: flex;
-`
-
-export const WrapperInformations = styled.div`
-  width: 100%;
-  padding: 0 15px;
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-`
-
-export const Upsell = styled.div`
-  width: 100%;
-  /* border: 1px solid red; */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 30px;
-
-  img {
-    width: 200px;
-    height: 200px;
-  }
-`
-
 export const DivPedido = styled.div`
   width: 100%;
   display: flex;
@@ -117,6 +89,15 @@ export const CronometroStyle = styled.div`
   }
 `
 
+export const WrapperInformations = styled.div`
+  width: 100%;
+  padding: 0 15px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+`
+
 export const DivQrcode = styled.div`
   width: 100%;
   max-width: 600px;
@@ -169,11 +150,11 @@ export const DivCode = styled.div`
   margin-top: 20px;
 `
 
-export const ButtonAdicionar = styled.button`
+export const ButtonCopy = styled.button`
   width: 100%;
-  max-width: 250px;
-  padding: 12px 10px;
-  margin-top: 30px;
+  max-width: 300px;
+  height: 50px;
+  margin: 10px 0 50px 0;
   border: none;
   border-radius: 30px;
   cursor: pointer;
@@ -192,7 +173,8 @@ export const ButtonAdicionar = styled.button`
   }
 
   @media screen and (max-width: 490px) {
-    width: 200px;
+    width: 250px;
     font-size: 0.875rem;
   }
 `
+

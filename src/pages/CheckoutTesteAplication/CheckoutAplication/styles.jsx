@@ -48,7 +48,7 @@ export const Content = styled.div`
   width: 100%;
   margin: 0 15px;
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
 
   @media screen and (max-width: 490px) {
     margin: 0;
@@ -352,10 +352,9 @@ export const SectionDesktop = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 32%;
 
   border-left: 1px solid #d9d9d9;
-  padding: 30px;
+  padding: 20px;
 
   @media screen and (max-width: 990px) {
     display: none;
@@ -445,6 +444,7 @@ export const ResumoPedido = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  padding-bottom: 10px;
 
   div {
     padding: 15px 15px 0;
@@ -463,7 +463,7 @@ export const ResumoPedido = styled.div`
 
 export const Total = styled.h3`
   font-size: 1.125rem;
-  font-weight: 500;
+  font-weight: 600;
   color: #202223;
 
   @media screen and (min-width: 990px) {
@@ -524,7 +524,15 @@ export const DivError = styled.div`
   flex-direction: column;
 
   .error-border {
-    border: 1px solid red;
+    border: 1px solid #f6605f;
+  }
+`
+
+export const DivErrorInputs = styled.div`
+  width: 100%;
+
+  .error-border {
+    border: 1px solid #f6605f;
   }
 `
 
@@ -566,7 +574,7 @@ export const Beneficios = styled.div`
 export const ImageLoja = styled.div`
   width: 100%;
   max-width: 530px;
-  margin-top: 20px;
+  margin: 20px 0;
   display: flex;
   justify-content: center;
 
@@ -587,7 +595,6 @@ export const Parcelas = styled.div`
   min-height: 46.4px;
   position: relative;
   z-index: 1;
-  /* border: 1px solid red; */
 
   .szh-accordion__item-heading {
     padding: 0;
@@ -650,7 +657,7 @@ export const PagamentoNegado = styled.div`
   width: 100%;
   max-width: 450px;
   margin: 20px 0 30px 0;
-  padding: 15px;
+  padding: 10px;
   border: 1px solid #ffbcc2;
   border-radius: 5px;
   background-color: #f8d7da;
