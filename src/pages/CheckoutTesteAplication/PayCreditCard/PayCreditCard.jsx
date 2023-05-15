@@ -27,8 +27,6 @@ function PayCreditCard() {
 
   const upsellHash = dataFromApi.data.upsell_hash
 
-  // console.log(dataFromApi.data.upsell_hash)
-
   const produtoUpsell = productsData
 
   function handleSubmitUpsell() {

@@ -187,6 +187,7 @@ function Checkout() {
 
   const { id } = useParams()
   const produto = productsData.find((p) => p.id == id)
+  const tipoProduto = produto.tipo
 
   // configuração do Accordion de parcelamento
   const providerValue = useAccordionProvider({
@@ -364,12 +365,23 @@ function Checkout() {
     }
 
     if (
-      (nomeCompleto &&
+      (tipoProduto === "fisico" &&
+        nomeCompleto &&
         email &&
         telefone &&
         cpf &&
         cep &&
         numero &&
+        numberCard &&
+        cvvCard &&
+        monthCardNumber &&
+        yearCardNumber &&
+        nameCard) != "" ||
+      (tipoProduto === "digital" &&
+        nomeCompleto &&
+        email &&
+        telefone &&
+        cpf &&
         numberCard &&
         cvvCard &&
         monthCardNumber &&
@@ -497,7 +509,17 @@ function Checkout() {
       "access-token": accessToken,
     }
 
-    if ((nomeCompleto && email && telefone && cpf && cep && numero) != "") {
+    if (
+      (tipoProduto === "fisico" &&
+        nomeCompleto &&
+        email &&
+        telefone &&
+        cpf &&
+        cep &&
+        numero) != "" ||
+      (tipoProduto === "digital" && nomeCompleto && email && telefone && cpf) !=
+        ""
+    ) {
       axios
         .post("https://admin.appmax.com.br/api/v3/customer", postCustomer, {
           headers,
@@ -603,7 +625,17 @@ function Checkout() {
       "access-token": accessToken,
     }
 
-    if ((nomeCompleto && email && telefone && cpf && cep && numero) != "") {
+    if (
+      (tipoProduto === "fisico" &&
+        nomeCompleto &&
+        email &&
+        telefone &&
+        cpf &&
+        cep &&
+        numero) != "" ||
+      (tipoProduto === "digital" && nomeCompleto && email && telefone && cpf) !=
+        ""
+    ) {
       axios
         .post("https://admin.appmax.com.br/api/v3/customer", postCustomer, {
           headers,
@@ -919,94 +951,106 @@ function Checkout() {
               </DivError>
             </DivFlex>
 
-            <TitleSection>Informações de Entrega</TitleSection>
-            <Text>Para onde devemos entregar o pedido?</Text>
+            {tipoProduto === "fisico" && (
+              <>
+                <TitleSection>Informações de Entrega</TitleSection>
+                <Text>Para onde devemos entregar o pedido?</Text>
 
-            <DivError>
-              <InputWrapper
-                style={{ flexDirection: "row", alignItems: "center" }}
-              >
-                <InputMask
-                  style={{ maxWidth: "186px" }}
-                  mask="99999-999"
-                  maskChar={null}
-                  id="cep"
-                  className={
-                    errorCEP
-                      ? "error-border"
-                      : "" || (errorInputs && cep === "")
-                      ? "error-border"
-                      : ""
-                  }
-                  value={cep}
-                  onChange={handleCepChange}
-                  required
-                />
-                <p className="placeholder">CEP*</p>
-                {showAddress && logradouro && bairro && cidade && estado && (
-                  <span>
-                    {cidade}/{estado}
-                  </span>
-                )}
-              </InputWrapper>
-
-              {errorCEP && <ErrorText>{errorCEP}</ErrorText>}
-            </DivError>
-
-            {showAddress && logradouro && bairro && cidade && estado && (
-              <div>
-                <DivFlex>
-                  <InputWrapper style={{ width: "250%" }}>
+                <DivError>
+                  <InputWrapper
+                    style={{ flexDirection: "row", alignItems: "center" }}
+                  >
                     <InputMask
-                      type="text"
-                      id="logradouro"
-                      value={logradouro}
-                      onChange={(event) => setLogradouro(event.target.value)}
-                      required
-                    />
-                    <p className="placeholder">Endereço*</p>
-                  </InputWrapper>
-
-                  <InputWrapper>
-                    <InputMask
-                      type="text"
-                      id="numero"
+                      style={{ maxWidth: "186px" }}
+                      mask="99999-999"
+                      maskChar={null}
+                      id="cep"
                       className={
-                        errorInputs && numero === "" ? "error-border" : ""
+                        errorCEP
+                          ? "error-border"
+                          : "" || (errorInputs && cep === "")
+                          ? "error-border"
+                          : ""
                       }
-                      value={numero}
-                      onChange={(event) => setNumero(event.target.value)}
+                      value={cep}
+                      onChange={handleCepChange}
                       required
                     />
-                    <p className="placeholder">Número*</p>
-                  </InputWrapper>
-                </DivFlex>
-
-                <DivFlex>
-                  <InputWrapper style={{ width: "250%" }}>
-                    <InputMask
-                      type="text"
-                      id="bairro"
-                      placeholder="Bairro*"
-                      value={bairro}
-                      onChange={(event) => setBairro(event.target.value)}
-                      required
-                    />
-                    <p className="placeholder">Bairro*</p>
+                    <p className="placeholder">CEP*</p>
+                    {showAddress &&
+                      logradouro &&
+                      bairro &&
+                      cidade &&
+                      estado && (
+                        <span>
+                          {cidade}/{estado}
+                        </span>
+                      )}
                   </InputWrapper>
 
-                  <InputWrapper>
-                    <InputMask
-                      type="text"
-                      id="complemento"
-                      value={complemento}
-                      onChange={(event) => setComplemento(event.target.value)}
-                      required
-                    />
-                    <p className="placeholder">Complemento</p>
-                  </InputWrapper>
-                </DivFlex>
-              </div>
+                  {errorCEP && <ErrorText>{errorCEP}</ErrorText>}
+                </DivError>
+
+                {showAddress && logradouro && bairro && cidade && estado && (
+                  <div>
+                    <DivFlex>
+                      <InputWrapper style={{ width: "250%" }}>
+                        <InputMask
+                          type="text"
+                          id="logradouro"
+                          value={logradouro}
+                          onChange={(event) =>
+                            setLogradouro(event.target.value)
+                          }
+                          required
+                        />
+                        <p className="placeholder">Endereço*</p>
+                      </InputWrapper>
+
+                      <InputWrapper>
+                        <InputMask
+                          type="text"
+                          id="numero"
+                          className={
+                            errorInputs && numero === "" ? "error-border" : ""
+                          }
+                          value={numero}
+                          onChange={(event) => setNumero(event.target.value)}
+                          required
+                        />
+                        <p className="placeholder">Número*</p>
+                      </InputWrapper>
+                    </DivFlex>
+
+                    <DivFlex>
+                      <InputWrapper style={{ width: "250%" }}>
+                        <InputMask
+                          type="text"
+                          id="bairro"
+                          placeholder="Bairro*"
+                          value={bairro}
+                          onChange={(event) => setBairro(event.target.value)}
+                          required
+                        />
+                        <p className="placeholder">Bairro*</p>
+                      </InputWrapper>
+
+                      <InputWrapper>
+                        <InputMask
+                          type="text"
+                          id="complemento"
+                          value={complemento}
+                          onChange={(event) =>
+                            setComplemento(event.target.value)
+                          }
+                          required
+                        />
+                        <p className="placeholder">Complemento</p>
+                      </InputWrapper>
+                    </DivFlex>
+                  </div>
+                )}
+              </>
             )}
 
             {errorInputs && (

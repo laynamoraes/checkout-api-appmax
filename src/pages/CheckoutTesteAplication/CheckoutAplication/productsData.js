@@ -1,6 +1,7 @@
 export const productsData = [
   {
     id: 1,
+    tipo: "fisico",
     nome: "Porta Sapatos Moderno de Vidro + Brinde Exclusivo",
     imagem:
       "https://cdn.shopify.com/s/files/1/0738/4249/1684/products/a_720x720_crop_center.jpg?v=1680015255",
@@ -47,7 +48,8 @@ export const productsData = [
   },
   {
     id: 2,
-    nome: "Secador de Cabelo",
+    tipo: "digital",
+    nome: "E-book Finanças Pessoais",
     imagem:
       "https://cdn.shopify.com/s/files/1/0738/4249/1684/products/a_720x720_crop_center.jpg?v=1680015255",
     preco: 10.0,
@@ -93,10 +95,11 @@ export const productsData = [
   },
   {
     id: 3,
+    tipo: "fisico",
     nome: "Guarda-roupa casal",
     imagem:
       "https://cdn.shopify.com/s/files/1/0738/4249/1684/products/a_720x720_crop_center.jpg?v=1680015255",
-    preco: 509.99,
+    preco: 14.99,
     descontoPix: function () {
       return (this.preco * 0.12).toFixed(2)
     },
