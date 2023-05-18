@@ -4,7 +4,7 @@ import { productsData } from "../CheckoutAplication/productsData"
 import { BsCheckCircle } from "react-icons/bs"
 import { useLocation } from "react-router-dom"
 import {
-  ButtonAdicionar,
+  // ButtonAdicionar,
   Container,
   Content,
   DivCode,
@@ -16,8 +16,8 @@ import {
   ImageLoja,
   Text,
   TextPedido,
-  Title,
-  Upsell,
+  // Title,
+  // Upsell,
   WrapperInformations,
 } from "./styles"
 
@@ -79,7 +79,7 @@ function PayCreditCard() {
       </div>
 
       <Content>
-        <Upsell>
+        {/* <Upsell>
           <Title>Adicione uma OFERTA ESPECIAL ao seu pedido</Title>
           <div style={{ display: "flex", gap: "20px" }}>
             <img
@@ -96,7 +96,7 @@ function PayCreditCard() {
               </ButtonAdicionar>
             </div>
           </div>
-        </Upsell>
+        </Upsell> */}
 
         <WrapperInformations>
           <DivQrcode>

@@ -5,45 +5,13 @@ export const productsData = [
     nome: "Porta Sapatos Moderno de Vidro + Brinde Exclusivo",
     imagem:
       "https://cdn.shopify.com/s/files/1/0738/4249/1684/products/a_720x720_crop_center.jpg?v=1680015255",
-    preco: 10.0,
-    descontoPix: function () {
-      return (this.preco * 0.12).toFixed(2)
-    },
-    precoPix: function () {
-      return (this.preco - this.preco * 0.12).toFixed(2)
-    },
-    preco2x: function () {
-      return (this.preco * 0.5225).toFixed(2)
-    },
-    preco3x: function () {
-      return (this.preco * 0.3535).toFixed(2)
-    },
-    preco4x: function () {
-      return (this.preco * 0.269).toFixed(2)
-    },
-    preco5x: function () {
-      return (this.preco * 0.21832).toFixed(2)
-    },
-    preco6x: function () {
-      return (this.preco * 0.1845).toFixed(2)
-    },
-    preco7x: function () {
-      return (this.preco * 0.16045).toFixed(2)
-    },
-    preco8x: function () {
-      return (this.preco * 0.1424).toFixed(2)
-    },
-    preco9x: function () {
-      return (this.preco * 0.12837).toFixed(2)
-    },
-    preco10x: function () {
-      return (this.preco * 0.1172).toFixed(2)
-    },
-    preco11x: function () {
-      return (this.preco * 0.10798).toFixed(2)
-    },
-    preco12x: function () {
-      return (this.preco * 0.1004).toFixed(2)
+    preco: 10.99,
+    bump: {
+      id: 123,
+      nome: "Prateleira de vidro",
+      imagem:
+        "https://cdn.shopify.com/s/files/1/0549/0003/1545/files/12122123_480x480.png?v=1678655574",
+      preco: 9.99,
     },
   },
   {
@@ -53,45 +21,6 @@ export const productsData = [
     imagem:
       "https://cdn.shopify.com/s/files/1/0738/4249/1684/products/a_720x720_crop_center.jpg?v=1680015255",
     preco: 10.0,
-    descontoPix: function () {
-      return (this.preco * 0.12).toFixed(2)
-    },
-    precoPix: function () {
-      return (this.preco - this.preco * 0.12).toFixed(2)
-    },
-    preco2x: function () {
-      return (this.preco * 0.5225).toFixed(2)
-    },
-    preco3x: function () {
-      return (this.preco * 0.3535).toFixed(2)
-    },
-    preco4x: function () {
-      return (this.preco * 0.269).toFixed(2)
-    },
-    preco5x: function () {
-      return (this.preco * 0.21832).toFixed(2)
-    },
-    preco6x: function () {
-      return (this.preco * 0.1845).toFixed(2)
-    },
-    preco7x: function () {
-      return (this.preco * 0.16045).toFixed(2)
-    },
-    preco8x: function () {
-      return (this.preco * 0.1424).toFixed(2)
-    },
-    preco9x: function () {
-      return (this.preco * 0.12837).toFixed(2)
-    },
-    preco10x: function () {
-      return (this.preco * 0.1172).toFixed(2)
-    },
-    preco11x: function () {
-      return (this.preco * 0.10798).toFixed(2)
-    },
-    preco12x: function () {
-      return (this.preco * 0.1004).toFixed(2)
-    },
   },
   {
     id: 3,
@@ -100,44 +29,5 @@ export const productsData = [
     imagem:
       "https://cdn.shopify.com/s/files/1/0738/4249/1684/products/a_720x720_crop_center.jpg?v=1680015255",
     preco: 14.99,
-    descontoPix: function () {
-      return (this.preco * 0.12).toFixed(2)
-    },
-    precoPix: function () {
-      return (this.preco - this.preco * 0.12).toFixed(2)
-    },
-    preco2x: function () {
-      return (this.preco * 0.5225).toFixed(2)
-    },
-    preco3x: function () {
-      return (this.preco * 0.3535).toFixed(2)
-    },
-    preco4x: function () {
-      return (this.preco * 0.269).toFixed(2)
-    },
-    preco5x: function () {
-      return (this.preco * 0.21832).toFixed(2)
-    },
-    preco6x: function () {
-      return (this.preco * 0.1845).toFixed(2)
-    },
-    preco7x: function () {
-      return (this.preco * 0.16045).toFixed(2)
-    },
-    preco8x: function () {
-      return (this.preco * 0.1424).toFixed(2)
-    },
-    preco9x: function () {
-      return (this.preco * 0.12837).toFixed(2)
-    },
-    preco10x: function () {
-      return (this.preco * 0.1172).toFixed(2)
-    },
-    preco11x: function () {
-      return (this.preco * 0.10798).toFixed(2)
-    },
-    preco12x: function () {
-      return (this.preco * 0.1004).toFixed(2)
-    },
   },
 ]

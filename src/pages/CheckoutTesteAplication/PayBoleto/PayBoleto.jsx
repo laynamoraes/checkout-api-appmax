@@ -30,7 +30,7 @@ import {
 
 function PayBoleto() {
   const location = useLocation()
-  const { dataFromApi, orderId, precoFinalBoleto } = location.state
+  const { dataFromApi, orderId } = location.state
   const [codeBoleto, setCodeBoleto] = useState(
     dataFromApi.data.boleto_payment_code
   )
@@ -95,12 +95,6 @@ function PayBoleto() {
               informaçõs necessárias para finalizar o seu pagamento.
             </Text>
             <DivValidade>
-              <Text>
-                Valor:{" "}
-                <strong>
-                  R$ {precoFinalBoleto.toString().replace(".", ",")}
-                </strong>
-              </Text>
               <Text>
                 Data de validade: <strong>{validadeBoletoFormat}</strong>
               </Text>

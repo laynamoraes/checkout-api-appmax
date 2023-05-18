@@ -668,3 +668,43 @@ export const Wrapper = styled.div`
   display: flex;
   justify-content: center;
 `
+
+export const BumpContainer = styled.div`
+  width: 100%;
+  max-width: 530px;
+  margin-top: 20px;
+  padding: 20px 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+
+  h3 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #333333;
+  }
+
+  div {
+    margin-top: 20px;
+    display: flex;
+    /* justify-content: space-between; */
+  }
+
+  div input {
+    width: 18px;
+    height: 18px;
+  }
+
+  div img {
+    width: 100%;
+    max-width: 70px;
+    height: auto;
+    max-height: 70px;
+    margin: 0 15px;
+  }
+
+  div p {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #333333;
+  }
+`

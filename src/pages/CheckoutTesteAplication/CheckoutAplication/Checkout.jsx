@@ -79,6 +79,7 @@ import {
   PagamentoNegado,
   Wrapper,
   DivErrorInputs,
+  BumpContainer,
 } from "./styles"
 import { useParams } from "react-router-dom"
 
@@ -188,6 +189,8 @@ function Checkout() {
   const { id } = useParams()
   const produto = productsData.find((p) => p.id == id)
   const tipoProduto = produto.tipo
+  const existBump = "bump" in produto
+  const [includeBump, setIncludeBump] = useState(false)
 
   // configuração do Accordion de parcelamento
   const providerValue = useAccordionProvider({
@@ -226,115 +229,305 @@ function Checkout() {
 
   const [itemCount, setItemCount] = useState(1)
 
-  const handleSetItemCount = (total) => {
+  // cálculo de preços
+  const precoTotalComBump =
+    produto.preco * itemCount + (produto.bump?.preco || 0)
+
+  // porcentagem de desconto quando o pagamento for em PIX
+  const taxaDescontoPix = 0.12
+
+  const precos = () => [
+    {
+      descontoPix: function () {
+        return produto.preco * taxaDescontoPix
+      },
+      precoPix: function () {
+        return produto.preco - produto.preco * taxaDescontoPix
+      },
+      preco2x: function () {
+        return produto.preco * 0.5225
+      },
+      preco3x: function () {
+        return produto.preco * 0.3535
+      },
+      preco4x: function () {
+        return produto.preco * 0.269
+      },
+      preco5x: function () {
+        return produto.preco * 0.21832
+      },
+      preco6x: function () {
+        return produto.preco * 0.1845
+      },
+      preco7x: function () {
+        return produto.preco * 0.16045
+      },
+      preco8x: function () {
+        return produto.preco * 0.1424
+      },
+      preco9x: function () {
+        return produto.preco * 0.12837
+      },
+      preco10x: function () {
+        return produto.preco * 0.1172
+      },
+      preco11x: function () {
+        return produto.preco * 0.10798
+      },
+      preco12x: function () {
+        return produto.preco * 0.1004
+      },
+    },
+    {
+      precoPixSomenteBump: function () {
+        return produto.bump.preco - produto.bump.preco * taxaDescontoPix
+      },
+      descontoPixBump: function () {
+        return precoTotalComBump * taxaDescontoPix
+      },
+      precoPixBump: function () {
+        return precoTotalComBump - precoTotalComBump * taxaDescontoPix
+      },
+      preco2xBump: function () {
+        return precoTotalComBump * 0.5225
+      },
+      preco3xBump: function () {
+        return precoTotalComBump * 0.3535
+      },
+      preco4xBump: function () {
+        return precoTotalComBump * 0.269
+      },
+      preco5xBump: function () {
+        return precoTotalComBump * 0.21832
+      },
+      preco6xBump: function () {
+        return precoTotalComBump * 0.1845
+      },
+      preco7xBump: function () {
+        return precoTotalComBump * 0.16045
+      },
+      preco8xBump: function () {
+        return precoTotalComBump * 0.1424
+      },
+      preco9xBump: function () {
+        return precoTotalComBump * 0.12837
+      },
+      preco10xBump: function () {
+        return precoTotalComBump * 0.1172
+      },
+      preco11xBump: function () {
+        return precoTotalComBump * 0.10798
+      },
+      preco12xBump: function () {
+        return precoTotalComBump * 0.1004
+      },
+    },
+  ]
+
+  const handleSetItemCount = (sku, total) => {
     setItemCount(total)
     setSelectedOption(
       options(total).find((item) => item.key === selectedKey).value
     )
+
+    setProductsAPI((prevProducts) => {
+      return prevProducts.map((product) => {
+        if (product.sku === sku) {
+          return {
+            ...product,
+            qty: total,
+          }
+        }
+        return product
+      })
+    })
   }
 
   const options = (itemCount) => [
     {
       key: 1,
-      value: `1x de R$ ${(itemCount * produto.preco)
+      value: `1x de R$ ${(includeBump == true
+        ? precoTotalComBump
+        : itemCount * produto.preco
+      )
+        .toFixed(2)
         .toString()
         .replace(".", ",")}`,
-      priceProduct: itemCount * produto.preco,
     },
     {
       key: 2,
-      value: `2x de R$ ${(parseFloat(produto.preco2x()) * itemCount)
+      value: `2x de R$ ${(includeBump == true
+        ? precos()[1].preco2xBump()
+        : precos()[0].preco2x() * itemCount
+      )
         .toFixed(2)
         .toString()
         .replace(".", ",")}*`,
     },
     {
       key: 3,
-      value: `3x de R$ ${(parseFloat(produto.preco3x()) * itemCount)
+      value: `3x de R$ ${(includeBump == true
+        ? precos()[1].preco3xBump()
+        : precos()[0].preco3x() * itemCount
+      )
         .toFixed(2)
         .toString()
         .replace(".", ",")}*`,
     },
     {
       key: 4,
-      value: `4x de R$ ${(parseFloat(produto.preco4x()) * itemCount)
+      value: `4x de R$ ${(includeBump == true
+        ? precos()[1].preco4xBump()
+        : precos()[0].preco4x() * itemCount
+      )
         .toFixed(2)
         .toString()
         .replace(".", ",")}*`,
     },
     {
       key: 5,
-      value: `5x de R$ ${(parseFloat(produto.preco5x()) * itemCount)
+      value: `5x de R$ ${(includeBump == true
+        ? precos()[1].preco5xBump()
+        : precos()[0].preco5x() * itemCount
+      )
         .toFixed(2)
         .toString()
         .replace(".", ",")}*`,
     },
     {
       key: 6,
-      value: `6x de R$ ${(parseFloat(produto.preco6x()) * itemCount)
+      value: `6x de R$ ${(includeBump == true
+        ? precos()[1].preco6xBump()
+        : precos()[0].preco6x() * itemCount
+      )
         .toFixed(2)
         .toString()
         .replace(".", ",")}*`,
     },
     {
       key: 7,
-      value: `7x de R$ ${(parseFloat(produto.preco7x()) * itemCount)
+      value: `7x de R$ ${(includeBump == true
+        ? precos()[1].preco7xBump()
+        : precos()[0].preco7x() * itemCount
+      )
         .toFixed(2)
         .toString()
         .replace(".", ",")}*`,
     },
     {
       key: 8,
-      value: `8x de R$ ${(parseFloat(produto.preco8x()) * itemCount)
+      value: `8x de R$ ${(includeBump == true
+        ? precos()[1].preco8xBump()
+        : precos()[0].preco8x() * itemCount
+      )
         .toFixed(2)
         .toString()
         .replace(".", ",")}*`,
     },
     {
       key: 9,
-      value: `9x de R$ ${(parseFloat(produto.preco9x()) * itemCount)
+      value: `9x de R$ ${(includeBump == true
+        ? precos()[1].preco9xBump()
+        : precos()[0].preco9x() * itemCount
+      )
         .toFixed(2)
         .toString()
         .replace(".", ",")}*`,
     },
     {
       key: 10,
-      value: `10x de R$ ${(parseFloat(produto.preco10x()) * itemCount)
+      value: `10x de R$ ${(includeBump == true
+        ? precos()[1].preco10xBump()
+        : precos()[0].preco10x() * itemCount
+      )
         .toFixed(2)
         .toString()
         .replace(".", ",")}*`,
     },
     {
       key: 11,
-      value: `11x de R$ ${(parseFloat(produto.preco11x()) * itemCount)
+      value: `11x de R$ ${(includeBump == true
+        ? precos()[1].preco11xBump()
+        : precos()[0].preco11x() * itemCount
+      )
         .toFixed(2)
         .toString()
         .replace(".", ",")}*`,
     },
     {
       key: 12,
-      value: `12x de R$ ${(parseFloat(produto.preco12x()) * itemCount)
+      value: `12x de R$ ${(includeBump == true
+        ? precos()[1].preco12xBump()
+        : precos()[0].preco12x() * itemCount
+      )
         .toFixed(2)
         .toString()
         .replace(".", ",")}*`,
-      priceProduct: parseFloat(produto.preco12x()) * 12 * itemCount,
     },
   ]
 
-  const [selectedOption, setSelectedOption] = useState(
-    options(itemCount)[11].value
-  )
+  const [selectedOption, setSelectedOption] = useState("")
+
+  useEffect(() => {
+    const newOptions = options(itemCount)
+    setSelectedOption(
+      newOptions.find((option) => option.key === selectedKey).value
+    )
+  }, [itemCount, selectedKey, includeBump])
 
   const handleOptionClick = (optionValue, optionKey) => {
     setSelectedOption(optionValue)
     setSelectedKey(optionKey)
     toggle("item-4")
-    console.log(optionValue)
-    console.log(optionKey)
+    // console.log(optionValue)
+    // console.log(optionKey)
   }
 
   const navigate = useNavigate()
   const [dataFromApi, setDataFromApi] = useState(null)
+
+  useEffect(() => {
+    setProductsAPI((prevProducts) => {
+      const updatedProduct = {
+        ...prevProducts[0],
+        price: selectedPix
+          ? parseFloat(precos()[0].precoPix().toFixed(2))
+          : produto.preco,
+      }
+      return [updatedProduct]
+    })
+  }, [selectedPix, produto.preco])
+
+  // array que comtém os produtos a serem enviados para API
+  const [productsAPI, setProductsAPI] = useState([
+    {
+      sku: produto.id,
+      name: produto.nome,
+      qty: itemCount,
+      price: selectedPix === true ? precos()[0].precoPix() : produto.preco,
+    },
+  ])
+
+  // adicionando o produto do order bump
+  const handleSelectBump = (event) => {
+    const productBump = {
+      sku: produto.bump.id,
+      name: produto.bump.nome,
+      qty: 1,
+      price:
+        selectedPix === true
+          ? parseFloat(precos()[1].precoPixSomenteBump().toFixed(2))
+          : produto.bump.preco,
+    }
+
+    if (event.target.checked) {
+      setProductsAPI([...productsAPI, productBump])
+      setIncludeBump(true)
+    } else {
+      setProductsAPI(productsAPI.filter((item) => item.sku !== productBump.sku))
+      setIncludeBump(false)
+    }
+  }
 
   function handleSubmitCredit() {
     const [firstName, ...lastName] = nomeCompleto.split(" ")
@@ -393,27 +586,21 @@ function Checkout() {
           headers,
         })
         .then((response) => {
-          console.log(response.data, "CLIENTE ✅")
+          // console.log(response.data, "CLIENTE ✅")
           setShowLoading(true)
 
           const postOrder = {
             "access-token": accessToken,
-            total: produto.preco,
-            products: [
-              {
-                sku: produto.id,
-                name: produto.nome,
-                qty: itemCount,
-              },
-            ],
+            products: productsAPI,
             customer_id: response.data.data.id,
           }
+
           axios
             .post("https://admin.appmax.com.br/api/v3/order", postOrder, {
               headers,
             })
             .then((response) => {
-              console.log(response.data, "ORDEM ✅")
+              // console.log(response.data, "ORDEM ✅")
 
               const orderId = response.data.data.id
 
@@ -444,7 +631,7 @@ function Checkout() {
                   { headers }
                 )
                 .then((response) => {
-                  console.log(response.data, "DEU CERTO O PAGAMENTO ✅")
+                  // console.log(response.data, "DEU CERTO O PAGAMENTO ✅")
 
                   setDataFromApi(response.data)
 
@@ -484,10 +671,6 @@ function Checkout() {
     const dataExpiracao = addMinutes(dataAtualFormat, 31)
     const dataExpiracaoJSON = format(dataExpiracao, "yyyy-MM-dd HH:mm:ss")
 
-    // preço no PIX
-    const precoPix = parseFloat(produto.precoPix())
-    const precoFinalPix = parseFloat((precoPix * itemCount).toFixed(2))
-
     const postCustomer = {
       "access-token": accessToken,
       firstname: firstName,
@@ -525,27 +708,21 @@ function Checkout() {
           headers,
         })
         .then((response) => {
-          console.log(response.data, "CLIENTE ✅")
+          // console.log(response.data, "CLIENTE ✅")
           setShowLoading(true)
 
           const postOrder = {
             "access-token": accessToken,
-            total: precoFinalPix,
-            products: [
-              {
-                sku: produto.id,
-                name: produto.nome,
-                qty: itemCount,
-              },
-            ],
+            products: productsAPI,
             customer_id: response.data.data.id,
           }
+
           axios
             .post("https://admin.appmax.com.br/api/v3/order", postOrder, {
               headers,
             })
             .then((response) => {
-              console.log(response.data, "ORDEM ✅")
+              // console.log(response.data, "ORDEM ✅")
 
               const orderId = response.data.data.id
 
@@ -571,7 +748,7 @@ function Checkout() {
                   { headers }
                 )
                 .then((response) => {
-                  console.log(response.data, "DEU CERTO O PAGAMENTO ✅")
+                  // console.log(response.data, "DEU CERTO O PAGAMENTO ✅")
                   setDataFromApi(response.data)
                   navigate("/payment-pix", {
                     state: {
@@ -602,8 +779,6 @@ function Checkout() {
   function handleSubmitBoleto() {
     const [firstName, ...lastName] = nomeCompleto.split(" ")
 
-    const precoFinalBoleto = parseFloat((produto.preco * itemCount).toFixed(2))
-
     const postCustomer = {
       "access-token": accessToken,
       firstname: firstName,
@@ -641,19 +816,12 @@ function Checkout() {
           headers,
         })
         .then((response) => {
-          console.log(response.data, "CLIENTE ✅")
+          // console.log(response.data, "CLIENTE ✅")
           setShowLoading(true)
 
           const postOrder = {
             "access-token": accessToken,
-            total: precoFinalBoleto,
-            products: [
-              {
-                sku: produto.id,
-                name: produto.nome,
-                qty: itemCount,
-              },
-            ],
+            products: productsAPI,
             customer_id: response.data.data.id,
           }
           axios
@@ -661,7 +829,7 @@ function Checkout() {
               headers,
             })
             .then((response) => {
-              console.log(response.data, "ORDEM ✅")
+              // console.log(response.data, "ORDEM ✅")
 
               const orderId = response.data.data.id
 
@@ -686,13 +854,12 @@ function Checkout() {
                   { headers }
                 )
                 .then((response) => {
-                  console.log(response.data, "DEU CERTO O PAGAMENTO ✅")
+                  // console.log(response.data, "DEU CERTO O PAGAMENTO ✅")
                   setDataFromApi(response.data)
                   navigate("/payment-boleto", {
                     state: {
                       dataFromApi: response.data,
                       orderId,
-                      precoFinalBoleto,
                     },
                   })
                 })
@@ -797,7 +964,10 @@ function Checkout() {
                       <button
                         type="button"
                         onClick={() => {
-                          handleSetItemCount(Math.max(itemCount - 1, 1))
+                          handleSetItemCount(
+                            produto.id,
+                            Math.max(itemCount - 1, 1)
+                          )
                         }}
                       >
                         -
@@ -811,7 +981,7 @@ function Checkout() {
                       <button
                         type="button"
                         onClick={() => {
-                          handleSetItemCount(itemCount + 1)
+                          handleSetItemCount(produto.id, itemCount + 1)
                         }}
                       >
                         +
@@ -819,6 +989,45 @@ function Checkout() {
                     </Quantidade>
                   </div>
                 </div>
+
+                {includeBump == true && (
+                  <div
+                    id="detalhesBump"
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-around",
+                      padding: "15px",
+                    }}
+                  >
+                    <div>
+                      <img src={produto.bump.imagem} alt="Imagem do Produto" />
+                    </div>
+
+                    <div style={{ padding: "0 15px", width: "100%" }}>
+                      {produto.bump.nome}
+                    </div>
+                    <div
+                      style={{
+                        width: "65%",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "flex-end",
+                        gap: "5px",
+                      }}
+                    >
+                      <p
+                        style={{
+                          fontSize: "1rem",
+                          fontWeight: "600",
+                          color: "#202223",
+                        }}
+                      >
+                        R$ {produto.bump.preco.toString().replace(".", ",")}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
                 <Cupom id="cupom" style={{ color: "#1e55f5" }}>
                   Tem cupom de desconto ou vale presente?
                 </Cupom>
@@ -834,13 +1043,21 @@ function Checkout() {
                   <div style={{ textAlign: "end" }}>
                     <p>
                       R${" "}
-                      {(itemCount * produto.preco).toString().replace(".", ",")}
+                      {(includeBump == true
+                        ? precoTotalComBump
+                        : itemCount * produto.preco
+                      )
+                        .toFixed(2)
+                        .replace(".", ",")}
                     </p>
                     <p>---</p>
                     {selectedPix && (
                       <p>
                         - R${" "}
-                        {(parseFloat(produto.descontoPix()) * itemCount)
+                        {(includeBump == true
+                          ? precos()[1].descontoPixBump()
+                          : precos()[0].descontoPix() * itemCount
+                        )
                           .toFixed(2)
                           .replace(".", ",")}
                       </p>
@@ -851,7 +1068,10 @@ function Checkout() {
                     {selectedPix && (
                       <Total>
                         R${" "}
-                        {(parseFloat(produto.precoPix()) * itemCount)
+                        {(includeBump
+                          ? precos()[1].precoPixBump()
+                          : precos()[0].precoPix() * itemCount
+                        )
                           .toFixed(2)
                           .replace(".", ",")}
                       </Total>
@@ -860,7 +1080,10 @@ function Checkout() {
                     {selectedBoleto && (
                       <Total>
                         R${" "}
-                        {(itemCount * produto.preco)
+                        {(includeBump == true
+                          ? precoTotalComBump
+                          : itemCount * produto.preco
+                        )
                           .toString()
                           .replace(".", ",")}
                       </Total>
@@ -1075,6 +1298,30 @@ function Checkout() {
               </PagamentoNegado>
             )}
 
+            {existBump == true ? (
+              <BumpContainer>
+                <h3>Aproveite e leve também</h3>
+                <div>
+                  <input
+                    type="checkbox"
+                    name="bump"
+                    id="bump"
+                    onChange={handleSelectBump}
+                  />
+                  <img src={produto.bump.imagem} alt="Imagem do produto" />
+                  <p>
+                    {produto.bump.nome}
+                    <br />
+                    <strong>
+                      R$ {produto.bump.preco.toString().replace(".", ",")}
+                    </strong>
+                  </p>
+                </div>
+              </BumpContainer>
+            ) : (
+              ""
+            )}
+
             <TitleSection style={{ marginTop: "36px" }}>
               Método de Pagamento
             </TitleSection>
@@ -1244,6 +1491,7 @@ function Checkout() {
                       </ControlledAccordion>
                     </Parcelas>
                   </Accordion>
+
                   <ButtonCnt>
                     <Button type="button" onClick={handleSubmitCredit}>
                       <FiLock />
@@ -1308,7 +1556,10 @@ function Checkout() {
                           Valor à vista{" "}
                           <strong>
                             R${" "}
-                            {(parseFloat(produto.precoPix()) * itemCount)
+                            {(includeBump
+                              ? precos()[1].precoPixBump()
+                              : precos()[0].precoPix() * itemCount
+                            )
                               .toFixed(2)
                               .replace(".", ",")}
                           </strong>
@@ -1339,6 +1590,7 @@ function Checkout() {
                         </Text>
                       </li>
                     </ul>
+
                     <ButtonCnt>
                       <Button type="button" onClick={handleSubmitPix}>
                         <FiLock />
@@ -1401,7 +1653,10 @@ function Checkout() {
                           Valor à vista{" "}
                           <strong>
                             R${" "}
-                            {(itemCount * produto.preco)
+                            {(includeBump == true
+                              ? precoTotalComBump
+                              : itemCount * produto.preco
+                            )
                               .toString()
                               .replace(".", ",")}
                           </strong>
@@ -1593,7 +1848,7 @@ function Checkout() {
                   <button
                     type="button"
                     onClick={() => {
-                      handleSetItemCount(Math.max(itemCount - 1, 1))
+                      handleSetItemCount(produto.id, Math.max(itemCount - 1, 1))
                     }}
                   >
                     -
@@ -1607,7 +1862,7 @@ function Checkout() {
                   <button
                     type="button"
                     onClick={() => {
-                      handleSetItemCount(itemCount + 1)
+                      handleSetItemCount(produto.id, itemCount + 1)
                     }}
                   >
                     +
@@ -1615,6 +1870,36 @@ function Checkout() {
                 </Quantidade>
               </div>
             </div>
+
+            {includeBump == true && (
+              <div
+                id="detalhesBump"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-around",
+                  padding: "15px",
+                }}
+              >
+                <div>
+                  <img src={produto.bump.imagem} alt="Imagem do Produto" />
+                </div>
+
+                <div style={{ padding: "0 15px", width: "100%" }}>
+                  {produto.bump.nome}
+
+                  <p
+                    style={{
+                      fontSize: "1rem",
+                      fontWeight: "600",
+                      color: "#202223",
+                    }}
+                  >
+                    R$ {produto.bump.preco.toString().replace(".", ",")}
+                  </p>
+                </div>
+              </div>
+            )}
+
             <Cupom id="cupom" style={{ color: "#1e55f5", fontSize: "0.75rem" }}>
               Tem cupom de desconto ou vale presente?
             </Cupom>
@@ -1629,14 +1914,22 @@ function Checkout() {
               </div>
               <div style={{ textAlign: "end" }}>
                 <p>
-                  R$ {(itemCount * produto.preco).toString().replace(".", ",")}
+                  R${" "}
+                  {(includeBump == true
+                    ? precoTotalComBump
+                    : itemCount * produto.preco
+                  )
+                    .toString()
+                    .replace(".", ",")}
                 </p>
                 <p>---</p>
-
                 {selectedPix && (
                   <p>
                     - R${" "}
-                    {(parseFloat(produto.descontoPix()) * itemCount)
+                    {(includeBump == true
+                      ? precos()[1].descontoPixBump()
+                      : precos()[0].descontoPix() * itemCount
+                    )
                       .toFixed(2)
                       .replace(".", ",")}
                   </p>
@@ -1647,7 +1940,10 @@ function Checkout() {
                 {selectedPix && (
                   <Total>
                     R${" "}
-                    {(parseFloat(produto.precoPix()) * itemCount)
+                    {(includeBump
+                      ? precos()[1].precoPixBump()
+                      : precos()[0].precoPix() * itemCount
+                    )
                       .toFixed(2)
                       .replace(".", ",")}
                   </Total>
@@ -1656,7 +1952,12 @@ function Checkout() {
                 {selectedBoleto && (
                   <Total>
                     R${" "}
-                    {(itemCount * produto.preco).toString().replace(".", ",")}
+                    {(includeBump == true
+                      ? precoTotalComBump
+                      : itemCount * produto.preco
+                    )
+                      .toString()
+                      .replace(".", ",")}
                   </Total>
                 )}
 
