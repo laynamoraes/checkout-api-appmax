@@ -23,43 +23,43 @@ import {
 
 function PayCreditCard() {
   const location = useLocation()
-  const { orderId, accessToken, dataFromApi } = location.state
+  const { orderId } = location.state
 
-  const upsellHash = dataFromApi.data.upsell_hash
+  // const upsellHash = dataFromApi.data.upsell_hash
 
-  const produtoUpsell = productsData
+  // const produtoUpsell = productsData
 
-  function handleSubmitUpsell() {
-    const postUpsell = {
-      "access-token": accessToken,
-      hash: upsellHash,
-      products: [
-        {
-          sku: produtoUpsell[1].id,
-          name: produtoUpsell[1].nome,
-          qty: 1,
-          price: produtoUpsell[1].preco,
-        },
-      ],
-      overwrite_cart: false,
-      installments: 1,
-    }
+  // function handleSubmitUpsell() {
+  //   const postUpsell = {
+  //     "access-token": accessToken,
+  //     hash: upsellHash,
+  //     products: [
+  //       {
+  //         sku: produtoUpsell[1].id,
+  //         name: produtoUpsell[1].nome,
+  //         qty: 1,
+  //         price: produtoUpsell[1].preco,
+  //       },
+  //     ],
+  //     overwrite_cart: false,
+  //     installments: 1,
+  //   }
 
-    const headers = {
-      "access-token": accessToken,
-    }
+  //   const headers = {
+  //     "access-token": accessToken,
+  //   }
 
-    axios
-      .post(`https://admin.appmax.com.br/api/v3/order/upsell`, postUpsell, {
-        headers,
-      })
-      .then((response) => {
-        console.log(response.data, "DEU CERTO O UPSELL ✅")
-      })
-      .catch((error) => {
-        console.error(error, "DEU ERRADO")
-      })
-  }
+  //   axios
+  //     .post(`https://admin.appmax.com.br/api/v3/order/upsell`, postUpsell, {
+  //       headers,
+  //     })
+  //     .then((response) => {
+  //       console.log(response.data, "DEU CERTO O UPSELL ✅")
+  //     })
+  //     .catch((error) => {
+  //       console.error(error, "DEU ERRADO")
+  //     })
+  // }
 
   return (
     <Container>

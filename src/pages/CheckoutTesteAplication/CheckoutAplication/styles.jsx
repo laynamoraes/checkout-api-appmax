@@ -132,10 +132,11 @@ export const InputWrapper = styled.div`
   max-width: 530px;
   position: relative;
 
-  input {
+  input,
+  select {
     font-weight: 400;
     color: #000;
-    padding: 14px 20px;
+    padding: 10px 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 0.875rem;
@@ -148,7 +149,7 @@ export const InputWrapper = styled.div`
 
     :focus,
     :valid {
-      padding: 20px 20px 5px 20px;
+      padding: 20px 0 5px 20px;
     }
 
     :focus ~ .placeholder,
@@ -158,6 +159,7 @@ export const InputWrapper = styled.div`
       opacity: 1;
     }
   }
+
 
   span {
     width: 100%;
@@ -540,6 +542,16 @@ export const ErrorText = styled.p`
   font-size: 0.813rem;
   color: red;
   margin-top: -5px;
+`
+
+export const CepManual = styled.p`
+  max-width: 190px;
+  font-size: 0.813rem;
+  font-weight: 600;
+  line-height: 1.5;
+  text-decoration: underline;
+  color: blue;
+  cursor: pointer;
 `
 
 export const Beneficios = styled.div`

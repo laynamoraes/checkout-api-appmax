@@ -10,6 +10,8 @@ import Checkout from "./pages/CheckoutTesteAplication/CheckoutAplication/Checkou
 import PayPix from "./pages/CheckoutTesteAplication/PayPix/PayPix"
 import PayCreditCard from "./pages/CheckoutTesteAplication/PayCreditCard/PayCreditCard"
 import PayBoleto from "./pages/CheckoutTesteAplication/PayBoleto/PayBoleto"
+import PresellOne from "./pages/CheckoutTesteAplication/PayCreditCard/PresellOne"
+import PresellTwo from "./pages/CheckoutTesteAplication/PayCreditCard/PresellTwo"
 
 const router = createBrowserRouter([
   {
@@ -17,7 +19,7 @@ const router = createBrowserRouter([
     element: <Home />,
   },
   {
-    path: "checkout-teste/:id",
+    path: "checkout/:id",
     element: <Checkout />,
   },
   {
@@ -31,6 +33,14 @@ const router = createBrowserRouter([
   {
     path: "payment-credit-card",
     element: <PayCreditCard />,
+  },
+  {
+    path: "presell-one/:id",
+    element: <PresellOne />,
+  },
+  {
+    path: "presell-two/:id",
+    element: <PresellTwo />,
   },
   {
     path: "payment-boleto",

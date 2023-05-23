@@ -42,15 +42,28 @@ export const WrapperInformations = styled.div`
 
 export const Upsell = styled.div`
   width: 100%;
-  /* border: 1px solid red; */
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 30px;
+  padding: 0 5px;
 
   img {
     width: 200px;
     height: 200px;
+
+    @media screen and (max-width: 490px) {
+      width: 150px;
+      height: 150px;
+    }
+  }
+`
+export const DivImage = styled.div`
+  width: 200px;
+  height: 200px;
+
+  @media screen and (max-width: 490px) {
+    width: 150px;
+    height: 150px;
   }
 `
 
@@ -182,6 +195,7 @@ export const ButtonAdicionar = styled.button`
   font-size: 1rem;
   font-weight: 700;
   transition: all 0.4s ease-in-out;
+  animation: pulsante 0.5s ease-in-out infinite alternate;
 
   box-shadow: 0 2px 5px 1px rgba(64, 60, 67, 0.16);
   -webkit-box-shadow: 0 2px 5px 1px rgba(64, 60, 67, 0.16);
@@ -192,7 +206,45 @@ export const ButtonAdicionar = styled.button`
   }
 
   @media screen and (max-width: 490px) {
-    width: 200px;
+    max-width: 190px;
     font-size: 0.875rem;
+
+    margin-top: 10px;
+  }
+
+  @keyframes pulsante {
+    0% {
+      transform: scale(1);
+    }
+
+    100% {
+      transform: scale(1.08);
+    }
+  }
+`
+
+export const ButtonSeguir = styled.button`
+  width: 100%;
+  max-width: 250px;
+  padding: 12px 10px;
+  margin-top: 30px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  background-color: #333333;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: all 0.4s ease-in-out;
+
+  :hover {
+    opacity: 0.8;
+  }
+
+  @media screen and (max-width: 490px) {
+    max-width: 190px;
+    font-size: 0.875rem;
+
+    margin-top: 12px;
   }
 `

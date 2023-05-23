@@ -80,6 +80,7 @@ import {
   Wrapper,
   DivErrorInputs,
   BumpContainer,
+  CepManual,
 } from "./styles"
 import { useParams } from "react-router-dom"
 
@@ -107,6 +108,8 @@ function Checkout() {
   const [numberCard, setNumberCard] = useState("")
   const [validityCard, setValidityCard] = useState("")
   const [cvvCard, setCvvCard] = useState("")
+
+  const [cepManual, setCepManual] = useState("")
 
   const [errorCEP, setErrorCEP] = useState("")
   const [errorCard, setErrorCard] = useState("")
@@ -139,7 +142,8 @@ function Checkout() {
           // console.log(response)
           const { logradouro, bairro, localidade, uf } = response.data
           if (response.data.erro) {
-            setErrorCEP("CEP não encontrado")
+            setErrorCEP("Verifique o CEP informado ou")
+            setCepManual("clique aqui para digitar seu endereço manualmente.")
             setShowAddress(false)
           } else {
             setLogradouro(logradouro)
@@ -159,6 +163,15 @@ function Checkout() {
       setShowAddress(false)
       setErrorCEP("")
     }
+  }
+
+  function handleCepManual() {
+    setLogradouro("")
+    setBairro("")
+    setCidade("")
+    setEstado("")
+    setShowAddress(true)
+    setErrorCEP("")
   }
 
   function handleCardValidation(event) {
@@ -486,6 +499,16 @@ function Checkout() {
   const navigate = useNavigate()
   const [dataFromApi, setDataFromApi] = useState(null)
 
+  // array que comtém os produtos a serem enviados para API
+  const [productsAPI, setProductsAPI] = useState([
+    {
+      sku: produto.id,
+      name: produto.nome,
+      qty: itemCount,
+      price: selectedPix === true ? precos()[0].precoPix() : produto.preco,
+    },
+  ])
+
   useEffect(() => {
     setProductsAPI((prevProducts) => {
       const updatedProduct = {
@@ -496,17 +519,7 @@ function Checkout() {
       }
       return [updatedProduct]
     })
-  }, [selectedPix, produto.preco])
-
-  // array que comtém os produtos a serem enviados para API
-  const [productsAPI, setProductsAPI] = useState([
-    {
-      sku: produto.id,
-      name: produto.nome,
-      qty: itemCount,
-      price: selectedPix === true ? precos()[0].precoPix() : produto.preco,
-    },
-  ])
+  }, [produto.preco])
 
   // adicionando o produto do order bump
   const handleSelectBump = (event) => {
@@ -586,7 +599,7 @@ function Checkout() {
           headers,
         })
         .then((response) => {
-          // console.log(response.data, "CLIENTE ✅")
+          console.log(response.data, "CLIENTE ✅")
           setShowLoading(true)
 
           const postOrder = {
@@ -600,7 +613,7 @@ function Checkout() {
               headers,
             })
             .then((response) => {
-              // console.log(response.data, "ORDEM ✅")
+              console.log(response.data, "ORDEM ✅")
 
               const orderId = response.data.data.id
 
@@ -631,11 +644,11 @@ function Checkout() {
                   { headers }
                 )
                 .then((response) => {
-                  // console.log(response.data, "DEU CERTO O PAGAMENTO ✅")
+                  console.log(response.data, "DEU CERTO O PAGAMENTO ✅")
 
                   setDataFromApi(response.data)
 
-                  navigate("/payment-credit-card", {
+                  navigate(`/presell-one/${produto.id}`, {
                     state: {
                       dataFromApi: response.data,
                       orderId,
@@ -1084,6 +1097,7 @@ function Checkout() {
                           ? precoTotalComBump
                           : itemCount * produto.preco
                         )
+                          .toFixed(2)
                           .toString()
                           .replace(".", ",")}
                       </Total>
@@ -1180,44 +1194,117 @@ function Checkout() {
                 <Text>Para onde devemos entregar o pedido?</Text>
 
                 <DivError>
-                  <InputWrapper
-                    style={{ flexDirection: "row", alignItems: "center" }}
-                  >
-                    <InputMask
-                      style={{ maxWidth: "186px" }}
-                      mask="99999-999"
-                      maskChar={null}
-                      id="cep"
-                      className={
-                        errorCEP
-                          ? "error-border"
-                          : "" || (errorInputs && cep === "")
-                          ? "error-border"
-                          : ""
-                      }
-                      value={cep}
-                      onChange={handleCepChange}
-                      required
-                    />
-                    <p className="placeholder">CEP*</p>
-                    {showAddress &&
-                      logradouro &&
-                      bairro &&
-                      cidade &&
-                      estado && (
-                        <span>
-                          {cidade}/{estado}
-                        </span>
-                      )}
-                  </InputWrapper>
+                  <DivFlex>
+                    <InputWrapper
+                      style={{ flexDirection: "row", alignItems: "center" }}
+                    >
+                      <InputMask
+                        style={{ maxWidth: "186px" }}
+                        mask="99999-999"
+                        maskChar={null}
+                        id="cep"
+                        className={
+                          errorInputs && cep === "" ? "error-border" : ""
+                        }
+                        value={cep}
+                        onChange={handleCepChange}
+                        required
+                      />
+                      <p className="placeholder">CEP*</p>
+                      {showAddress &&
+                        logradouro &&
+                        bairro &&
+                        cidade &&
+                        estado && (
+                          <span>
+                            {cidade}/{estado}
+                          </span>
+                        )}
+                    </InputWrapper>
 
-                  {errorCEP && <ErrorText>{errorCEP}</ErrorText>}
+                    {showAddress && cepManual && (
+                      <>
+                        <InputWrapper>
+                          <InputMask
+                            type="text"
+                            id="cidade"
+                            value={cidade}
+                            onChange={(event) => setCidade(event.target.value)}
+                            required
+                          />
+                          <p className="placeholder">Cidade*</p>
+                        </InputWrapper>
+
+                        {/* <InputWrapper>
+                          <InputMask
+                            type="text"
+                            id="estado"
+                            value={estado}
+                            maxLength={2}
+                            onChange={(event) => setEstado(event.target.value)}
+                            required
+                          />
+                          <p className="placeholder">Estado*</p>
+                        </InputWrapper> */}
+
+                        <InputWrapper>
+                          <select
+                            id="estado"
+                            value={estado}
+                            onChange={(event) => setEstado(event.target.value)}
+                            required
+                          >
+                            <option>Selecione</option>
+                            <option>AC</option>
+                            <option>AL</option>
+                            <option>AP</option>
+                            <option>AM</option>
+                            <option>BA</option>
+                            <option>CE</option>
+                            <option>DF</option>
+                            <option>ES</option>
+                            <option>GO</option>
+                            <option>MA</option>
+                            <option>MT</option>
+                            <option>MS</option>
+                            <option>MG</option>
+                            <option>PA</option>
+                            <option>PB</option>
+                            <option>PR</option>
+                            <option>PE</option>
+                            <option>PI</option>
+                            <option>RJ</option>
+                            <option>RN</option>
+                            <option>RS</option>
+                            <option>RR</option>
+                            <option>RO</option>
+                            <option>SC</option>
+                            <option>SP</option>
+                            <option>SE</option>
+                            <option>TO</option>
+                          </select>
+                          <p className="placeholder">Estado*</p>
+                        </InputWrapper>
+                      </>
+                    )}
+                  </DivFlex>
+
+                  {errorCEP && (
+                    <>
+                      <ErrorText style={{ color: "blue" }}>
+                        {errorCEP}
+                      </ErrorText>
+                      <CepManual onClick={handleCepManual}>
+                        {cepManual}
+                      </CepManual>
+                    </>
+                  )}
                 </DivError>
 
-                {showAddress && logradouro && bairro && cidade && estado && (
+                {showAddress && (
                   <div>
                     <DivFlex>
-                      <InputWrapper style={{ width: "250%" }}>
+                      <InputWrapper style={{ width: "210%" }}>
                         <InputMask
                           type="text"
                           id="logradouro"
@@ -1246,11 +1333,10 @@ function Checkout() {
                     </DivFlex>
 
                     <DivFlex>
-                      <InputWrapper style={{ width: "250%" }}>
+                      <InputWrapper style={{ width: "210%" }}>
                         <InputMask
                           type="text"
                           id="bairro"
-                          placeholder="Bairro*"
                           value={bairro}
                           onChange={(event) => setBairro(event.target.value)}
                           required
@@ -1657,6 +1743,7 @@ function Checkout() {
                               ? precoTotalComBump
                               : itemCount * produto.preco
                             )
+                              .toFixed(2)
                               .toString()
                               .replace(".", ",")}
                           </strong>
@@ -1919,6 +2006,7 @@ function Checkout() {
                     ? precoTotalComBump
                     : itemCount * produto.preco
                   )
+                    .toFixed(2)
                     .toString()
                     .replace(".", ",")}
                 </p>
@@ -1956,6 +2044,7 @@ function Checkout() {
                       ? precoTotalComBump
                       : itemCount * produto.preco
                     )
+                      .toFixed(2)
                       .toString()
                       .replace(".", ",")}
                   </Total>

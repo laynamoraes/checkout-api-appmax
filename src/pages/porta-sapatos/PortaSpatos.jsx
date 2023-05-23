@@ -37,7 +37,7 @@ function PortaSapatos() {
   const navigate = useNavigate()
 
   const handleCheckout = () => {
-    navigate(`/checkout-teste/${Db.id}`)
+    navigate(`/checkout/${Db.id}`)
   }
 
   const campoRef = useRef(null)
