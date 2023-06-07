@@ -53,13 +53,11 @@ function PresellOne() {
       .then((response) => {
         setShowLoading(true)
 
-        console.log(response.data, "DEU CERTO O UPSELL 1 ✅")
+        console.log(response.data, "DEU CERTO O UPSELL ✅")
 
-        navigate(`/presell-two/${produto.id}`, {
+        navigate(`/payment-credit-card`, {
           state: {
-            dataFromApi,
             orderId,
-            accessToken,
           },
         })
       })
@@ -73,11 +71,9 @@ function PresellOne() {
     setShowLoading(true)
 
     setTimeout(() => {
-      navigate(`/presell-two/${produto.id}`, {
+      navigate(`/payment-credit-card`, {
         state: {
-          dataFromApi,
           orderId,
-          accessToken,
         },
       })
     }, 2000)

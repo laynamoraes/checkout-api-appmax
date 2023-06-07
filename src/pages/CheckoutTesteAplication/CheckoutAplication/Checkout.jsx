@@ -86,10 +86,10 @@ import { useParams } from "react-router-dom"
 
 function Checkout() {
   // Token de produção
-  const accessToken = "A34B7F16-EC737AA7-F5C01F9C-8AA6C0A5"
+  const accessToken = ""
 
   // Token de teste
-  // const accessToken = "8D479FDE-06804C4D-CE2E17D2-8180D7D1"
+  // const accessToken = ""
   const [nomeCompleto, setNomeCompleto] = useState("")
   const [email, setEmail] = useState("")
   const [telefone, setTelefone] = useState("")
@@ -599,7 +599,7 @@ function Checkout() {
           headers,
         })
         .then((response) => {
-          console.log(response.data, "CLIENTE ✅")
+          // console.log(response.data, "CLIENTE ✅")
           setShowLoading(true)
 
           const postOrder = {
@@ -613,7 +613,7 @@ function Checkout() {
               headers,
             })
             .then((response) => {
-              console.log(response.data, "ORDEM ✅")
+              // console.log(response.data, "ORDEM ✅")
 
               const orderId = response.data.data.id
 
@@ -644,7 +644,7 @@ function Checkout() {
                   { headers }
                 )
                 .then((response) => {
-                  console.log(response.data, "DEU CERTO O PAGAMENTO ✅")
+                  // console.log(response.data, "DEU CERTO O PAGAMENTO ✅")
 
                   setDataFromApi(response.data)
 
@@ -893,7 +893,7 @@ function Checkout() {
       setErrorInputs("Por favor, preencha todos os campos")
     }
   }
-
+  
   return (
     <Container>
       <GlobalStyle />

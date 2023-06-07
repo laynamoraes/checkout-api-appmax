@@ -17,6 +17,7 @@
     "cpf-check": "^3.0.0",
     "cpf-cnpj-validator": "^1.0.3",
     "date-fns": "^2.29.3",
+    "express": "^4.18.2",
     "ipaddr.js": "^2.0.1",
     "numeral": "^2.0.6",
     "react": "^18.2.0",

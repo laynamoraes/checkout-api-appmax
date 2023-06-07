@@ -11,7 +11,6 @@ import PayPix from "./pages/CheckoutTesteAplication/PayPix/PayPix"
 import PayCreditCard from "./pages/CheckoutTesteAplication/PayCreditCard/PayCreditCard"
 import PayBoleto from "./pages/CheckoutTesteAplication/PayBoleto/PayBoleto"
 import PresellOne from "./pages/CheckoutTesteAplication/PayCreditCard/PresellOne"
-import PresellTwo from "./pages/CheckoutTesteAplication/PayCreditCard/PresellTwo"
 
 const router = createBrowserRouter([
   {
@@ -37,10 +36,6 @@ const router = createBrowserRouter([
   {
     path: "presell-one/:id",
     element: <PresellOne />,
-  },
-  {
-    path: "presell-two/:id",
-    element: <PresellTwo />,
   },
   {
     path: "payment-boleto",
